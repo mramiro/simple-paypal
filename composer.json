@@ -1,0 +1,17 @@
+{
+    "name": "mramiro/simple-paypal",
+    "description": "An extremely simple interface for the PayPal Payments Standard API",
+    "license": "MIT",
+    "authors": [
+      {
+        "name": "Miguel Ramiro",
+        "email": "miguel@mramiro.com"
+      }
+    ],
+    "require": {},
+    "autoload": {
+      "psr-4": {
+        "SimplePaypal": "src"
+      }
+    }
+}
