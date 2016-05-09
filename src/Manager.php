@@ -3,6 +3,7 @@
 use RuntimeException;
 use SimplePaypal\Support\Constants;
 use SimplePaypal\Transport\HttpClientInterface;
+use SimplePaypal\Transport\CurlHandler;
 
 class Manager
 {
@@ -19,6 +20,12 @@ class Manager
   {
     if (isset($opts['debug'])) $this->debug = $opts['debug'];
     if (isset($opts['pdt_token'])) $this->pdtToken = $opts['pdt_token'];
+    if (isset($opts['http_client']) && $opts['http_client'] instanceof HttpClientInterface) {
+      $this->setHttpClient($opts['http_client']);
+    }
+    else {
+      $this->setHttpClient(new CurlHandler());
+    }
   }
 
   public function getEndpoint()
@@ -31,14 +38,14 @@ class Manager
     $this->httpClient = $client;
   }
 
-  protected function getHttpClient()
+  public function getHttpClient()
   {
     return $this->httpClient;
   }
 
-  protected function getPdtToken()
+  public function getPdtToken()
   {
-    return $this->$pdtToken;
+    return $this->pdtToken;
   }
 
   public function validatePdtTransaction($transactionId)
