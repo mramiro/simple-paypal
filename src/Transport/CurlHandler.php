@@ -32,11 +32,11 @@ class CurlHandler implements HttpClientInterface
     return $this->executeCurl($ch);
   }
 
-  public function post($url, array $data = array(), array $options = array())
+  public function post($url, $data = null, array $options = array())
   {
     $ch = $this->newCurl($url, $options);
     curl_setopt($ch, CURLOPT_POST, true);
-    if (count($data) > 0) {
+    if ($data) {
       curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
     }
     return $this->executeCurl($ch);

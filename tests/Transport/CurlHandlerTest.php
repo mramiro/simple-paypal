@@ -12,4 +12,19 @@ class CurlHandlerTest extends PHPUnit_Framework_TestCase
     $this->assertNotNull($json);
     $this->assertEquals($json->login, 'HackerYou');
   }
+
+  public function testPost()
+  {
+    $instance = new CurlHandler();
+    $someMarkdown = <<< MD
+# Title
+Lorem ipsum dolor sit amet, consectetur adipisicing elit
+MD;
+    $params = json_encode(array(
+      'text' => $someMarkdown,
+      'mode' => 'markdown'
+    ));
+    $response = $instance->post('https://api.github.com/markdown', $params);
+    $this->assertContains('<h1>', $response);
+  }
 }
