@@ -1,0 +1,5 @@
+SUCCESS
+akey=A%20value
+anotherkey=42
+keynumber3=10.5
+urlencoded=Ms.%20%26y%28ampersandy%29%20is%20the%20nicest%20puppy%20ever
