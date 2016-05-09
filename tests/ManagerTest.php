@@ -26,4 +26,23 @@ class ManagerTest extends PHPUnit_Framework_TestCase
     $this->assertEquals($httpClient, $manager->getHttpClient());
   }
 
+  protected function newManager()
+  {
+    return new Manager(array(
+      'debug' => true,
+      'pdt_token' => getenv('PDT_TOKEN')
+    ));
+  }
+
+  public function testPdtTransactionValidation()
+  {
+    $manager = $this->newManager();
+
+    $t = $manager->validatePdtTransaction('totallyFakeTransactionId');
+    $this->assertFalse($t->isSuccessful());
+    $transactionErrors = $t->getErrors();
+    $this->assertGreaterThan(0, $transactionErrors);
+    // Paypal returns error 4002 when the transaction id (tx) is invalid
+    $this->assertEquals(4002, $transactionErrors[0]);
+  }
 }

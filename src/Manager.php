@@ -48,6 +48,11 @@ class Manager
     return $this->pdtToken;
   }
 
+  public function setPdtToken($token)
+  {
+    $this->pdtToken = $token;
+  }
+
   public function validatePdtTransaction($transactionId)
   {
     $client = $this->getHttpClient();
@@ -56,7 +61,7 @@ class Manager
       'tx' => $transactionId,
       'at' => $this->getPdtToken()
     ));
-    if ($transaction = Transaction::fromPdtResponse($response)) {
+    if ($transaction = PDT\Transaction::fromResponseText($response)) {
       return $transaction;
     }
     else {
