@@ -1,6 +1,5 @@
 <?php
 
-use Mockery;
 use SimplePaypal\Manager;
 use SimplePaypal\Support\Constants;
 
