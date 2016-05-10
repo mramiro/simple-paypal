@@ -1,8 +1,11 @@
 <?php namespace SimplePaypal\Support;
 
 use ArrayAccess;
+use IteratorAggregate;
+use ArrayIterator;
+use Countable;
 
-class Collection implements ArrayAccess
+class Collection implements ArrayAccess, IteratorAggregate, Countable
 {
   protected $items = array();
 
@@ -19,15 +22,19 @@ class Collection implements ArrayAccess
     return $this;
   }
 
-  public function add($key, $value)
+  public function add($value)
   {
-    $this->offsetSet($key, $value);
+    $this->items[] = $value;
     return $this;
   }
 
   public function toArray()
   {
-    return $this->items;
+    $items = array();
+    foreach ($this->items as $key => $item) {
+      $items[$key] = $item instanceof self ? $item->toArray() : $item;
+    }
+    return $items;
   }
 
   public function toJson($options = 0)
@@ -48,7 +55,7 @@ class Collection implements ArrayAccess
 
   public function offsetExists($key)
   {
-    return array_key_exists($this->items, $key);
+    return array_key_exists($key, $this->items);
   }
 
   public function offsetGet($key)
@@ -58,12 +65,22 @@ class Collection implements ArrayAccess
 
   public function offsetSet($key, $value)
   {
-    $this->items[$key] = $value;
+    $this->set($key, $value);
   }
 
   public function offsetUnset($key)
   {
     unset($this->$items[$key]);
+  }
+
+  public function getIterator()
+  {
+    return new ArrayIterator($this->items);
+  }
+
+  public function count()
+  {
+    return count($this->items);
   }
 
   public function __get($key)
