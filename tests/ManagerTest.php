@@ -1,7 +1,7 @@
 <?php
 
 use SimplePaypal\Manager;
-use SimplePaypal\Support\Constants;
+use SimplePaypal\Common\Constants;
 
 class ManagerTest extends PHPUnit_Framework_TestCase
 {

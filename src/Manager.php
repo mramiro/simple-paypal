@@ -1,7 +1,7 @@
 <?php namespace SimplePaypal;
 
 use RuntimeException;
-use SimplePaypal\Support\Constants;
+use SimplePaypal\Common\Constants;
 use SimplePaypal\Transport\HttpClientInterface;
 use SimplePaypal\Transport\CurlHandler;
 
@@ -20,7 +20,7 @@ class Manager
   {
     if (isset($opts['debug'])) $this->debug = $opts['debug'];
     if (isset($opts['pdt_token'])) $this->pdtToken = $opts['pdt_token'];
-    if (isset($opts['http_client']) && $opts['http_client'] instanceof HttpClientInterface) {
+    if (isset($opts['http_client'])) {
       $this->setHttpClient($opts['http_client']);
     }
     else {

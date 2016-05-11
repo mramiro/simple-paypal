@@ -1,6 +1,6 @@
 <?php namespace SimplePaypal\PDT;
 
-use SimplePaypal\Support\NvpCollection;
+use SimplePaypal\Common\NvpCollection;
 
 class Transaction extends NvpCollection
 {

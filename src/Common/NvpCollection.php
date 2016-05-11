@@ -1,4 +1,6 @@
-<?php namespace SimplePaypal\Support;
+<?php namespace SimplePaypal\Common;
+
+use SimplePaypal\Support\Collection;
 
 class NvpCollection extends Collection
 {

@@ -1,4 +1,4 @@
-<?php namespace SimplePaypal\Support;
+<?php namespace SimplePaypal\Common;
 
 class Constants
 {
