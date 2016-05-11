@@ -1,5 +1,6 @@
 <?php namespace SimplePaypal\Buttons;
 
+use SimplePaypal\Common\ConfigResolver;
 use SimplePaypal\Support\ConstrainedCollection;
 
 abstract class Button extends ConstrainedCollection
@@ -9,6 +10,16 @@ abstract class Button extends ConstrainedCollection
     'notify_url',
     'bn'
   );
+  protected $config;
+
+  public function __construct(ConfigResolver $config, array $vars = array())
+  {
+    $this->config = $config;
+    $this->setDefaults();
+    parent::__construct($vars);
+  }
+
+  protected function setDefaults() {}
 
   protected function getAllowedVars()
   {
@@ -32,10 +43,25 @@ abstract class Button extends ConstrainedCollection
     return in_array($key, $this->getAllowedVars());
   }
 
-  protected function createInput($name, $value, $type="hidden")
+  protected function createInputTag($name, $value, $type="hidden")
   {
     return "<input type=\"$type\" name=\"$name\" value=\"$value\">";
   }
 
-  public abstract function __toString();
+  public function __toString()
+  {
+    return $this->toHtmlForm(false);
+  }
+
+  public function toHtmlForm($formatted = true)
+  {
+    $sep = $formatted ? PHP_EOL : '';
+    $html = "<form method=\"POST\" action=\"{$this->config->getEndpoint()}\">" . $sep;
+    $html .= $this->createInnerHtml($formatted);
+    $html .= "</form>";
+    return $html;
+  }
+
+  public abstract function createInnerHtml($formatted = true);
+
 }

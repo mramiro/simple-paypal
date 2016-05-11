@@ -1,41 +1,39 @@
 <?php namespace SimplePaypal;
 
 use RuntimeException;
+use SimplePaypal\Support\Configurable;
 use SimplePaypal\Common\Constants;
+use SimplePaypal\Common\ConfigResolver;
 use SimplePaypal\Transport\HttpClientInterface;
 use SimplePaypal\Transport\CurlHandler;
 
-class Manager
+class Manager extends Configurable implements ConfigResolver
 {
+  protected static $options = array(
+    'debug' => false,
+    'pdt_token' => null,
+    'currency' => Constants::DEFAULT_CURRENCY,
+    'http_client' => 'curl'
+  );
+
   protected $pdtToken;
   protected $debug;
   protected $httpClient;
-
-  public function __construct(array $options = array())
-  {
-    $this->parseOptions($options);
-  }
-
-  protected function parseOptions(array $opts)
-  {
-    if (isset($opts['debug'])) $this->debug = $opts['debug'];
-    if (isset($opts['pdt_token'])) $this->pdtToken = $opts['pdt_token'];
-    if (isset($opts['http_client'])) {
-      $this->setHttpClient($opts['http_client']);
-    }
-    else {
-      $this->setHttpClient(new CurlHandler());
-    }
-  }
+  protected $currency;
 
   public function getEndpoint()
   {
     return $this->debug ? Constants::SANDBOX_ENDPOINT : Constants::ENDPOINT;
   }
 
-  public function setHttpClient(HttpClientInterface $client)
+  public function setHttpClient($client)
   {
-    $this->httpClient = $client;
+    if ($client instanceof HttpClientInterface) {
+      $this->httpClient = $client;
+    }
+    if ($client == 'curl') {
+      $this->httpClient = new CurlHandler();
+    }
   }
 
   public function getHttpClient()
@@ -51,6 +49,18 @@ class Manager
   public function setPdtToken($token)
   {
     $this->pdtToken = $token;
+  }
+
+  public function getCurrency()
+  {
+    return $this->currency;
+  }
+
+  public function setCurrency($currency)
+  {
+    if (Constants::currencyIsValid($currency)) {
+      $this->currency = $currency;
+    }
   }
 
   public function validatePdtTransaction($transactionId)
@@ -69,6 +79,11 @@ class Manager
         'Could not obtain transaction information from Paypal. Transaction id = ' . $transactionId
       );
     }
+  }
+
+  public function createCartUploadButton()
+  {
+    $cart = new CartUpload();
   }
 
 }

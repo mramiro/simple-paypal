@@ -42,7 +42,7 @@ class Constants
 
   public static function currencyIsValid($currency)
   {
-    return in_array(static::normalizeCurrency($currency), static::$currencies);
+    return in_array(static::normalizeCurrency($currency), array_keys(static::$currencies));
   }
 
   public static function getCurrencies()

@@ -1,7 +1,6 @@
 <?php namespace SimplePaypal\Buttons;
 
 use SimplePaypal\Common\Constants;
-use SimplePaypal\Support\Collection;
 
 class CartUpload extends Cart
 {
@@ -17,17 +16,13 @@ class CartUpload extends Cart
   protected $items = array(
     'cmd' => '_cart',
     'upload' => true,
-    'display' => true,
-    'currency_code' => Constants::DEFAULT_CURRENCY
+    'display' => true
   );
-  protected $cartItems;
+  protected $cartItems = array();
 
-  public function __construct($variables = array())
+  protected function setDefaults()
   {
-    $this->cartItems = new Collection();
-    if (is_array($variables) && count($variables) > 0) {
-      $this->setVars($variables);
-    }
+    $this->set('currency_code', $this->config->getCurrency());
   }
 
   public function getItems()
@@ -37,7 +32,7 @@ class CartUpload extends Cart
 
   public function addItem(Item $item)
   {
-    $this->cartItems->add($item);
+    $this->cartItems[] = $item;
     return $this;
   }
 
@@ -86,25 +81,21 @@ class CartUpload extends Cart
     return $this->set('display', (bool)$display);
   }
 
-  public function toHtmlForm($whitespaced = true)
+  public function createInnerHtml($formatted = true)
   {
-    $sep = $whitespaced ? PHP_EOL : '';
+    $sep = $formatted ? PHP_EOL : '';
     $html = '';
     foreach ($this->toArray() as $key => $value) {
-      $html .= $this->createInput($key, $value) . $sep;
+      $html .= $this->createInputTag($key, $value) . $sep;
     }
     $counter = 1;
     foreach ($this->getItems() as $item) {
       foreach ($item->toArray() as $key => $value) {
-        $html .= $this->createInput($key . '_' . $counter, $value) . $sep;
+        $html .= $this->createInputTag($key . '_' . $counter, $value) . $sep;
       }
       $counter++;
     }
     return $html;
   }
 
-  public function __toString()
-  {
-    return $this->toHtmlForm(false);
-  }
 }
