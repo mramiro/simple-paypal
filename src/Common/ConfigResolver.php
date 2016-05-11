@@ -4,4 +4,5 @@ interface ConfigResolver
 {
   public function getEndpoint();
   public function getCurrency();
+  public function getBusinessId();
 }

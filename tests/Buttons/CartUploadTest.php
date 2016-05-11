@@ -11,7 +11,8 @@ class CartUploadTest extends PHPUnit_Framework_TestCase
   {
     $this->configResolver = Mockery::mock('SimplePaypal\Common\ConfigResolver', array(
       'getEndpoint' => 'https://dummy.endpoint.com',
-      'getCurrency' => 'USD'
+      'getCurrency' => 'USD',
+      'getBusinessId' => 'dummy@mail.com'
     ));
   }
 

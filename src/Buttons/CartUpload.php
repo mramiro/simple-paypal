@@ -23,6 +23,7 @@ class CartUpload extends Cart
   protected function setDefaults()
   {
     $this->set('currency_code', $this->config->getCurrency());
+    $this->set('business', $this->config->getBusinessId());
   }
 
   public function getItems()

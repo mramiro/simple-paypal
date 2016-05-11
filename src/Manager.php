@@ -13,13 +13,15 @@ class Manager extends Configurable implements ConfigResolver
     'debug' => false,
     'pdt_token' => null,
     'currency' => Constants::DEFAULT_CURRENCY,
-    'http_client' => 'curl'
+    'http_client' => 'curl',
+    'business_id' => null
   );
 
   protected $pdtToken;
   protected $debug;
   protected $httpClient;
   protected $currency;
+  protected $businessId;
 
   public function getEndpoint()
   {
@@ -63,6 +65,16 @@ class Manager extends Configurable implements ConfigResolver
     }
   }
 
+  public function getBusinessId()
+  {
+    return $this->businessId();
+  }
+
+  public function setBusinessId($id)
+  {
+    $this->businessId($id);
+  }
+
   public function validatePdtTransaction($transactionId)
   {
     $client = $this->getHttpClient();
@@ -83,7 +95,7 @@ class Manager extends Configurable implements ConfigResolver
 
   public function createCartUploadButton()
   {
-    $cart = new CartUpload();
+    return new CartUpload($this);
   }
 
 }
