@@ -18,7 +18,9 @@ class Collection implements ArrayAccess, IteratorAggregate, Countable
 
   public function fill(array $items)
   {
-    $this->items = $items;
+    foreach ($items as $key => $value) {
+      $this->set($key, $value);
+    }
     return $this;
   }
 

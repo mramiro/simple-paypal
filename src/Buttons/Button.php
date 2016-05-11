@@ -1,8 +1,10 @@
 <?php namespace SimplePaypal\Buttons;
 
-abstract class Button
+use SimplePaypal\Support\ConstrainedCollection;
+
+abstract class Button extends ConstrainedCollection
 {
-  protected static $allowedVars = array(
+  protected static $allowed = array(
     'cmd',
     'notify_url',
     'bn'
@@ -10,44 +12,30 @@ abstract class Button
 
   protected function getAllowedVars()
   {
-    return self::$allowedVars;
+    $vars = static::$allowed;
+    $current = get_class($this);
+    while ($current) {
+      $parent = get_parent_class($current);
+      if (isset($parent::$allowed)) {
+        $vars = array_unique(array_merge($parent::$allowed, $vars));
+      }
+      else {
+        break;
+      }
+      $current = $parent;
+    };
+    return $vars;
   }
 
-  public function setVar($key, $value)
-  {
-    if ($this->varCanBeSet($key)) {
-      $this->$variables[$key] = $value;
-    }
-    return $this;
-  }
-
-  public function getVar($key)
-  {
-    return array_key_exists($key, $this->$variables) ? $this->$variables[$key] : null;
-  }
-
-  public function setVars(array $variables)
-  {
-    foreach ($variables as $key => $value) {
-      $this->setVar($key, $value);
-    }
-    return $this;
-  }
-
-  public function getVars()
-  {
-    return $this->variables;
-  }
-
-  protected function varCanBeSet($key)
+  protected function canBeSet($key)
   {
     return in_array($key, $this->getAllowedVars());
   }
-
-  public abstract function __toString();
 
   protected function createInput($name, $value, $type="hidden")
   {
     return "<input type=\"$type\" name=\"$name\" value=\"$value\">";
   }
+
+  public abstract function __toString();
 }
