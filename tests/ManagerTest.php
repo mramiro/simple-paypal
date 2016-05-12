@@ -15,9 +15,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
     $this->assertEquals(Constants::DEFAULT_CURRENCY, $manager->getCurrency());
 
     // Test invalid values
-    $manager->setHttpClient('anInvalidValue');
     $manager->setCurrency('WTF'); // Invalid currency code.
-    $this->assertInstanceOf('SimplePaypal\Transport\CurlHandler', $manager->getHttpClient());
     $this->assertEquals(Constants::DEFAULT_CURRENCY, $manager->getCurrency());
 
     // Test custom values
@@ -38,7 +36,8 @@ class ManagerTest extends PHPUnit_Framework_TestCase
   {
     return new Manager(array(
       'debug' => true,
-      'pdt_token' => getenv('PDT_TOKEN')
+      'pdt_token' => getenv('PDT_TOKEN'),
+      'business_id' => getenv('BUSINESS_ID')
     ));
   }
 
@@ -52,6 +51,14 @@ class ManagerTest extends PHPUnit_Framework_TestCase
     $this->assertGreaterThan(0, $transactionErrors);
     // Paypal returns error 4002 when the transaction id (tx) is invalid
     $this->assertEquals(4002, $transactionErrors[0]);
+  }
+
+  public function testCreateCartUploadButton()
+  {
+    $manager = $this->newManager();
+    $cart = $manager->createCartUploadButton();
+    $this->assertInstanceOf('SimplePaypal\Buttons\CartUpload', $cart);
+    $this->assertEquals($manager->getBusinessId(), $cart->business);
   }
 
   public function tearDown()

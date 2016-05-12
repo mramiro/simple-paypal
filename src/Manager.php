@@ -9,48 +9,36 @@ use SimplePaypal\Transport\CurlHandler;
 
 class Manager extends Configurable implements ConfigResolver
 {
-  protected static $options = array(
-    'debug' => false,
-    'pdt_token' => null,
-    'currency' => Constants::DEFAULT_CURRENCY,
-    'http_client' => 'curl',
-    'business_id' => null
-  );
-
   protected $pdtToken;
   protected $debug;
   protected $httpClient;
   protected $currency;
   protected $businessId;
 
+  protected function getConfigOptions()
+  {
+    return array(
+      'debug' => false,
+      'currency' => Constants::DEFAULT_CURRENCY,
+      'http_client' => function() { return new CurlHandler(); },
+      'pdt_token' => null,
+      'business_id' => null
+    );
+  }
+
   public function getEndpoint()
   {
     return $this->debug ? Constants::SANDBOX_ENDPOINT : Constants::ENDPOINT;
   }
 
-  public function setHttpClient($client)
+  public function setHttpClient(HttpClientInterface $client)
   {
-    if ($client instanceof HttpClientInterface) {
-      $this->httpClient = $client;
-    }
-    if ($client == 'curl') {
-      $this->httpClient = new CurlHandler();
-    }
-  }
-
-  public function getHttpClient()
-  {
-    return $this->httpClient;
+    $this->httpClient = $client;
   }
 
   public function getPdtToken()
   {
     return $this->pdtToken;
-  }
-
-  public function setPdtToken($token)
-  {
-    $this->pdtToken = $token;
   }
 
   public function getCurrency()
@@ -67,12 +55,7 @@ class Manager extends Configurable implements ConfigResolver
 
   public function getBusinessId()
   {
-    return $this->businessId();
-  }
-
-  public function setBusinessId($id)
-  {
-    $this->businessId($id);
+    return $this->businessId;
   }
 
   public function validatePdtTransaction($transactionId)
@@ -95,7 +78,7 @@ class Manager extends Configurable implements ConfigResolver
 
   public function createCartUploadButton()
   {
-    return new CartUpload($this);
+    return new Buttons\CartUpload($this);
   }
 
 }
