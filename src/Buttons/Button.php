@@ -58,6 +58,7 @@ abstract class Button extends ConstrainedCollection
     $sep = $formatted ? PHP_EOL : '';
     $html = "<form method=\"POST\" action=\"{$this->config->getEndpoint()}\">" . $sep;
     $html .= $this->createInnerHtml($formatted);
+    $html .= $this->createInputTag('submit', 'Pay with Paypal', 'submit') . $sep;
     $html .= "</form>";
     return $html;
   }

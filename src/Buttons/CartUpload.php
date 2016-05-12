@@ -8,15 +8,14 @@ class CartUpload extends Cart
     'business',
     'discount_amount_cart',
     'discount_rate_cart',
-    'display',
     'handling_cart',
     'paymentaction',
     'shopping_url',
+    'return'
   );
   protected $items = array(
     'cmd' => '_cart',
     'upload' => true,
-    'display' => true
   );
   protected $cartItems = array();
 
@@ -81,11 +80,6 @@ class CartUpload extends Cart
   public function setShoppingUrl($url)
   {
     return $this->set('shopping_url', $action);
-  }
-
-  public function setDisplayability($display = true)
-  {
-    return $this->set('display', (bool)$display);
   }
 
   public function createInnerHtml($formatted = true)
