@@ -39,6 +39,12 @@ class CartUpload extends Cart
 
   public function setItems(array $items)
   {
+    $this->cartItems = array();
+    return $this->addItems($items);
+  }
+
+  public function addItems(array $items)
+  {
     foreach ($items as $item) {
       $this->addItem($item);
     }

@@ -1,0 +1,19 @@
+<form method="POST" action="http://endpoint.dummy.com">
+<input type="hidden" name="cmd" value="_cart">
+<input type="hidden" name="upload" value="1">
+<input type="hidden" name="display" value="1">
+<input type="hidden" name="currency_code" value="AUD">
+<input type="hidden" name="business" value="dummy@mail.com">
+<input type="hidden" name="item_number_1" value="1001">
+<input type="hidden" name="item_name_1" value="A dog">
+<input type="hidden" name="amount_1" value="49.99">
+<input type="hidden" name="quantity_1" value="1">
+<input type="hidden" name="item_number_2" value="1002">
+<input type="hidden" name="item_name_2" value="A cat">
+<input type="hidden" name="amount_2" value="39.99">
+<input type="hidden" name="quantity_2" value="1">
+<input type="hidden" name="item_number_3" value="2034">
+<input type="hidden" name="item_name_3" value="A box full of little stones">
+<input type="hidden" name="amount_3" value="3">
+<input type="hidden" name="quantity_3" value="10">
+</form>

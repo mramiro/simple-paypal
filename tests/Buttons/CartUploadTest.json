@@ -1,0 +1,25 @@
+{
+  "config" : {
+    "endpoint": "http://endpoint.dummy.com",
+    "currency": "AUD",
+    "business": "dummy@mail.com"
+  },
+  "items" : [
+    {
+      "id": 1001,
+      "name": "A dog",
+      "price": 49.99
+    },
+    {
+      "id": 1002,
+      "name": "A cat",
+      "price": 39.99
+    },
+    {
+      "id": 2034,
+      "name": "A box full of little stones",
+      "price": 3.00,
+      "qty": 10
+    }
+  ]
+}
