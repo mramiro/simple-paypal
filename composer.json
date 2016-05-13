@@ -10,7 +10,8 @@
     ],
     "require": {
       "php": ">=5.3",
-        "danielstjules/stringy": "^2.3"
+        "danielstjules/stringy": "^2.3",
+        "myclabs/php-enum": "^1.4"
     },
     "autoload": {
       "psr-4": {

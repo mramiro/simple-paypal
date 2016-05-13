@@ -4,6 +4,7 @@ use RuntimeException;
 use SimplePaypal\Support\Configurable;
 use SimplePaypal\Common\Constants;
 use SimplePaypal\Common\ConfigResolver;
+use SimplePaypal\Common\Types\Currency;
 use SimplePaypal\Transport\HttpClientInterface;
 use SimplePaypal\Transport\CurlHandler;
 
@@ -48,9 +49,7 @@ class Manager extends Configurable implements ConfigResolver
 
   public function setCurrency($currency)
   {
-    if (Constants::currencyIsValid($currency)) {
-      $this->currency = $currency;
-    }
+    $this->currency = $currency instanceof Currency ? $currency : new Currency($currency);
   }
 
   public function getBusinessId()
