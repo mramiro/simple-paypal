@@ -1,28 +1,28 @@
-<?php namespace SimplePaypal\Buttons;
+<?php namespace SimplePaypal\Html\Carts;
 
-use SimplePaypal\Common\Constants;
+use SimplePaypal\Html\Item;
+use SimplePaypal\Html\CheckoutPage;
+use SimplePaypal\Html\AutomaticFillout;
 
-class CartUpload extends Cart
+final class UploadCart extends Base
 {
   protected static $allowed = array(
-    'business',
-    'discount_amount_cart',
-    'discount_rate_cart',
-    'handling_cart',
-    'paymentaction',
-    'shopping_url',
-    'return'
-  );
-  protected $items = array(
-    'cmd' => '_cart',
-    'upload' => true,
+    'upload'
   );
   protected $cartItems = array();
 
-  protected function setDefaults()
+  protected function getAllowedVars()
   {
-    $this->set('currency_code', $this->config->getCurrency());
-    $this->set('business', $this->config->getBusinessId());
+    return array_merge(parent::getAllowedVars(),
+      CheckoutPage::$allowed,
+      AutomaticFillout::$allowed
+    );
+  }
+
+  public function __construct(array $items = array())
+  {
+    parent::__construct($items);
+    $this->upload = true;
   }
 
   public function getItems()
@@ -50,36 +50,11 @@ class CartUpload extends Cart
     return $this;
   }
 
-  public function setPayPalId($id)
-  {
-    return $this->set('business', $id);
-  }
-
-  public function setCurrency($currencyCode)
-  {
-    return $this->set('currency_code', $currencyCode);
-  }
-
   public function setDiscount($discount, $relative = false)
   {
     return $relative ?
       $this->set('discount_rate_cart', $discount) :
       $this->set('discount_amount_cart', $discount);
-  }
-
-  public function setHandlingFee($fee)
-  {
-    return $this->set('handling_cart', $fee);
-  }
-
-  public function setPaymentAction($action)
-  {
-    return $this->set('paymentaction', $action);
-  }
-
-  public function setShoppingUrl($url)
-  {
-    return $this->set('shopping_url', $action);
   }
 
   public function createInnerHtml($formatted = true)

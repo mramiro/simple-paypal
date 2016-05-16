@@ -5,9 +5,9 @@ abstract class ConstrainedCollection extends Collection
   public function set($key, $value)
   {
     if ($this->canBeSet($key)) {
-      parent::set($key, $value);
+      return parent::set($key, $value);
     }
-    return $this;
+    throw new \UnexpectedValueException("Collection does not allow setting key: [$key]");
   }
 
   protected abstract function canBeSet($key);

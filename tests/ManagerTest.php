@@ -54,11 +54,11 @@ class ManagerTest extends PHPUnit_Framework_TestCase
     $this->assertEquals(4002, $transactionErrors[0]);
   }
 
-  public function testCreateCartUploadButton()
+  public function testCreateUploadCartButton()
   {
     $manager = $this->newManager();
-    $cart = $manager->createCartUploadButton();
-    $this->assertInstanceOf('SimplePaypal\Buttons\CartUpload', $cart);
+    $cart = $manager->createUploadCartButton();
+    $this->assertInstanceOf('SimplePaypal\Html\Carts\UploadCart', $cart);
     $this->assertEquals($manager->getBusinessId(), $cart->business);
   }
 

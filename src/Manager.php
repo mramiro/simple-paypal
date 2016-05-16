@@ -3,12 +3,11 @@
 use RuntimeException;
 use SimplePaypal\Support\Configurable;
 use SimplePaypal\Common\Constants;
-use SimplePaypal\Common\ConfigResolver;
 use SimplePaypal\Common\Types\Currency;
 use SimplePaypal\Transport\HttpClientInterface;
 use SimplePaypal\Transport\CurlHandler;
 
-class Manager extends Configurable implements ConfigResolver
+class Manager extends Configurable
 {
   protected $pdtToken;
   protected $debug;
@@ -37,24 +36,9 @@ class Manager extends Configurable implements ConfigResolver
     $this->httpClient = $client;
   }
 
-  public function getPdtToken()
-  {
-    return $this->pdtToken;
-  }
-
-  public function getCurrency()
-  {
-    return $this->currency;
-  }
-
   public function setCurrency($currency)
   {
     $this->currency = $currency instanceof Currency ? $currency : new Currency($currency);
-  }
-
-  public function getBusinessId()
-  {
-    return $this->businessId;
   }
 
   public function validatePdtTransaction($transactionId)
@@ -75,9 +59,14 @@ class Manager extends Configurable implements ConfigResolver
     }
   }
 
-  public function createCartUploadButton()
+  public function createUploadCartButton()
   {
-    return new Buttons\CartUpload($this);
+    $cart = new Html\Carts\UploadCart(array(
+      'currency_code' => $this->getCurrency(),
+      'business' => $this->getBusinessId()
+    ));
+    $cart->setFormAction($this->getEndpoint());
+    return $cart;
   }
 
 }

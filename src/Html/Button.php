@@ -1,25 +1,13 @@
-<?php namespace SimplePaypal\Buttons;
+<?php namespace SimplePaypal\Html;
 
-use SimplePaypal\Common\ConfigResolver;
-use SimplePaypal\Support\ConstrainedCollection;
-
-abstract class Button extends ConstrainedCollection
+abstract class Button extends VarCollection
 {
   protected static $allowed = array(
     'cmd',
     'notify_url',
     'bn'
   );
-  protected $config;
-
-  public function __construct(ConfigResolver $config, array $vars = array())
-  {
-    $this->config = $config;
-    $this->setDefaults();
-    parent::__construct($vars);
-  }
-
-  protected function setDefaults() {}
+  protected $formAction;
 
   protected function getAllowedVars()
   {
@@ -28,7 +16,7 @@ abstract class Button extends ConstrainedCollection
     while ($current) {
       $parent = get_parent_class($current);
       if (isset($parent::$allowed)) {
-        $vars = array_unique(array_merge($parent::$allowed, $vars));
+        $vars = array_merge($parent::$allowed, $vars);
       }
       else {
         break;
@@ -36,11 +24,6 @@ abstract class Button extends ConstrainedCollection
       $current = $parent;
     };
     return $vars;
-  }
-
-  protected function canBeSet($key)
-  {
-    return in_array($key, $this->getAllowedVars());
   }
 
   protected function createInputTag($name, $value, $type="hidden")
@@ -53,10 +36,15 @@ abstract class Button extends ConstrainedCollection
     return $this->toHtmlForm(false);
   }
 
+  public function setFormAction($action)
+  {
+    $this->formAction = $action;
+  }
+
   public function toHtmlForm($formatted = true)
   {
     $sep = $formatted ? PHP_EOL : '';
-    $html = "<form method=\"POST\" action=\"{$this->config->getEndpoint()}\">" . $sep;
+    $html = "<form method=\"POST\" action=\"{$this->formAction}\">" . $sep;
     $html .= $this->createInnerHtml($formatted);
     $html .= $this->createInputTag('submit', 'Pay with Paypal', 'submit') . $sep;
     $html .= "</form>";
