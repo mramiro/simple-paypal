@@ -37,8 +37,11 @@ class ManagerTest extends PHPUnit_Framework_TestCase
   {
     return new Manager(array(
       'debug' => true,
-      'pdt_token' => getenv('PDT_TOKEN'),
-      'business_id' => getenv('BUSINESS_ID')
+      'pdt_token' => getenv('SP_PDT_TOKEN'),
+      'business_id' => getenv('SP_BUSINESS_ID'),
+      'forced_locale' => getenv('SP_LOCALE'),
+      'country' => getenv('SP_COUNTRY'),
+      'vendor' => getenv('SP_VENDOR')
     ));
   }
 

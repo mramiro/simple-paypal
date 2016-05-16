@@ -8,6 +8,7 @@ abstract class Button extends VarCollection
     'bn'
   );
   protected $formAction;
+  protected $buttonType = '';
 
   protected function getAllowedVars()
   {
@@ -39,6 +40,11 @@ abstract class Button extends VarCollection
   public function setFormAction($action)
   {
     $this->formAction = $action;
+  }
+
+  public function setBuildNotation($vendor, $country)
+  {
+    $this->bn = implode('_', array($vendor, $this->buttonType, 'WPS', $country));
   }
 
   public function toHtmlForm($formatted = true)

@@ -21,6 +21,7 @@ abstract class Base extends Button
     'handling_cart',
     'paymentaction',
   );
+  protected $buttonType = 'ShoppingCart';
 
   public function __construct(array $items = array())
   {

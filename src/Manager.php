@@ -4,8 +4,11 @@ use RuntimeException;
 use SimplePaypal\Support\Configurable;
 use SimplePaypal\Common\Constants;
 use SimplePaypal\Common\Types\Currency;
+use SimplePaypal\Common\Types\Country;
+use SimplePaypal\Common\Types\Locale;
 use SimplePaypal\Transport\HttpClientInterface;
 use SimplePaypal\Transport\CurlHandler;
+use SimplePaypal\Html\Button;
 
 class Manager extends Configurable
 {
@@ -14,6 +17,9 @@ class Manager extends Configurable
   protected $httpClient;
   protected $currency;
   protected $businessId;
+  protected $forcedLocale;
+  protected $country;
+  protected $vendor;
 
   protected function getConfigOptions()
   {
@@ -22,7 +28,10 @@ class Manager extends Configurable
       'currency' => Constants::DEFAULT_CURRENCY,
       'http_client' => function() { return new CurlHandler(); },
       'pdt_token' => null,
-      'business_id' => null
+      'business_id' => null,
+      'forced_locale' => null,
+      'country' => null,
+      'vendor' => null
     );
   }
 
@@ -39,6 +48,16 @@ class Manager extends Configurable
   public function setCurrency($currency)
   {
     $this->currency = $currency instanceof Currency ? $currency : new Currency($currency);
+  }
+
+  public function setForcedLocale($locale)
+  {
+    $this->forcedLocale = $locale instanceof Locale ? $locale : new Locale($locale);
+  }
+
+  public function setCountry($country)
+  {
+    $this->country = $country instanceof Country ? $country : new Country($country);
   }
 
   public function validatePdtTransaction($transactionId)
@@ -59,14 +78,30 @@ class Manager extends Configurable
     }
   }
 
-  public function createUploadCartButton()
+  public function createUploadCartButton(array $items = array())
   {
     $cart = new Html\Carts\UploadCart(array(
       'currency_code' => $this->getCurrency(),
-      'business' => $this->getBusinessId()
+      'business' => $this->getBusinessId(),
     ));
-    $cart->setFormAction($this->getEndpoint());
+    $cart = $this->decorateButton($cart);
+    $cart->setItems($items);
     return $cart;
+  }
+
+  protected function decorateButton(Button $btn)
+  {
+    $btn->setFormAction($this->getEndpoint());
+    if (isset($this->forcedLocale)) {
+      try {
+        $btn->lc = $this->forcedLocale;
+      }
+      catch (\UnexpectedValueException $e){}
+    }
+    if (isset($this->country) && isset($this->vendor)) {
+      $btn->setBuildNotation($this->vendor, $this->country);
+    }
+    return $btn;
   }
 
 }
