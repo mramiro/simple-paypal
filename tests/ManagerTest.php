@@ -33,21 +33,9 @@ class ManagerTest extends PHPUnit_Framework_TestCase
     $this->assertEquals(Currency::MEXICAN_PESO, $manager->getCurrency());
   }
 
-  protected function newManager()
-  {
-    return new Manager(array(
-      'debug' => true,
-      'pdt_token' => getenv('SP_PDT_TOKEN'),
-      'business_id' => getenv('SP_BUSINESS_ID'),
-      'forced_locale' => getenv('SP_LOCALE'),
-      'country' => getenv('SP_COUNTRY'),
-      'vendor' => getenv('SP_VENDOR')
-    ));
-  }
-
   public function testPdtTransactionValidation()
   {
-    $manager = $this->newManager();
+    $manager = newManagerForDebug();
 
     $t = $manager->validatePdtTransaction('totallyFakeTransactionId');
     $this->assertFalse($t->isSuccessful());
@@ -59,7 +47,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
 
   public function testCreateUploadCartButton()
   {
-    $manager = $this->newManager();
+    $manager = newManagerForDebug();
     $cart = $manager->createUploadCartButton();
     $this->assertInstanceOf('SimplePaypal\Html\Carts\UploadCart', $cart);
     $this->assertEquals($manager->getBusinessId(), $cart->business);
