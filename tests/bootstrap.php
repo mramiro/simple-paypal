@@ -10,7 +10,11 @@ function newManagerForDebug()
     'business_id' => getenv('BUSINESS_ID'),
     'forced_locale' => getenv('LOCALE'),
     'country' => getenv('COUNTRY'),
-    'vendor' => getenv('VENDOR')
+    'vendor' => getenv('VENDOR'),
+    'ewp_cert' => realpath(getenv('EWP_CERT_FILE')),
+    'ewp_key' => realpath(getenv('EWP_KEY_FILE')),
+    'ewp_paypal_cert' => realpath(getenv('EWP_PAYPAL_CERT_FILE')),
+    'ewp_cert_id' => getenv('EWP_CERT_ID')
   ));
 }
 

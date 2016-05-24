@@ -20,6 +20,9 @@ class Manager extends Configurable
   protected $forcedLocale;
   protected $country;
   protected $vendor;
+  protected $ewpCert, $ewpCertId, $ewpKey, $ewpKeyPass, $ewpPaypalCert;
+
+  protected $ewpEncryptor;
 
   protected function getConfigOptions()
   {
@@ -31,7 +34,12 @@ class Manager extends Configurable
       'business_id' => null,
       'forced_locale' => null,
       'country' => null,
-      'vendor' => null
+      'vendor' => null,
+      'ewp_cert' => null,
+      'ewp_cert_id' => null,
+      'ewp_key' => null,
+      'ewp_key_pass' => null,
+      'ewp_paypal_cert' => null
     );
   }
 
@@ -102,6 +110,23 @@ class Manager extends Configurable
       $btn->setBuildNotation($this->vendor, $this->country);
     }
     return $btn;
+  }
+
+  protected function getEncryptor()
+  {
+    if (!isset($this->ewpEncryptor)) {
+      $key = isset($this->ewpKeyPass) ? array($this->ewpKey, $this->ewpKeyPass) : $this->ewpKey;
+      $this->ewpEncryptor = new EWP\Encryptor($this->ewpCert, $key, $this->ewpPaypalCert);
+    }
+    return $this->ewpEncryptor;
+  }
+
+  public function encryptButton(Button $btn)
+  {
+    $encrypted = new EWP\EncryptedButton($this->ewpCertId, $btn);
+    $encrypted->setFormAction($this->getEndpoint());
+    $encrypted->encrypt($this->getEncryptor());
+    return $encrypted;
   }
 
 }

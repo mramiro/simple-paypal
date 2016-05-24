@@ -27,6 +27,11 @@ abstract class Button extends VarCollection
     return $vars;
   }
 
+  public function getVars()
+  {
+    return $this->items;
+  }
+
   protected function createInputTag($name, $value, $type="hidden")
   {
     return "<input type=\"$type\" name=\"$name\" value=\"$value\">";
@@ -57,6 +62,14 @@ abstract class Button extends VarCollection
     return $html;
   }
 
-  public abstract function createInnerHtml($formatted = true);
+  protected function createInnerHtml($formatted = true)
+  {
+    $sep = $formatted ? PHP_EOL : '';
+    $html = '';
+    foreach ($this->getVars() as $key => $value) {
+      $html .= $this->createInputTag($key, $value) . $sep;
+    }
+    return $html;
+  }
 
 }

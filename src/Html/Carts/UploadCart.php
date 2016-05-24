@@ -57,21 +57,17 @@ final class UploadCart extends Base
       $this->set('discount_amount_cart', $discount);
   }
 
-  public function createInnerHtml($formatted = true)
+  public function getVars()
   {
-    $sep = $formatted ? PHP_EOL : '';
-    $html = '';
-    foreach ($this->toArray() as $key => $value) {
-      $html .= $this->createInputTag($key, $value) . $sep;
-    }
+    $vars = parent::getVars();
     $counter = 1;
     foreach ($this->getItems() as $item) {
       foreach ($item->toArray() as $key => $value) {
-        $html .= $this->createInputTag($key . '_' . $counter, $value) . $sep;
+        $vars[$key . '_' . $counter] = $value;
       }
       $counter++;
     }
-    return $html;
+    return $vars;
   }
 
 }
