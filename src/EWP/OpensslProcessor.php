@@ -1,5 +1,7 @@
 <?php namespace SimplePaypal\EWP;
 
+// Adapted from http://blog.scrobbld.com/paypal/protecting-your-payments-with-ewp/
+
 class OpensslProcessor implements PKCS7Processor
 {
   protected $tempFileDirectory;

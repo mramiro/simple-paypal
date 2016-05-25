@@ -1,6 +1,6 @@
 {
     "name": "mramiro/simple-paypal",
-    "description": "An extremely simple interface for the PayPal Payments Standard API",
+    "description": "A simple interface for the PayPal Payments Standard API",
     "license": "MIT",
     "authors": [
       {
@@ -9,9 +9,13 @@
       }
     ],
     "require": {
-      "php": ">=5.3",
+        "php": ">=5.3",
+        "ext-curl": "*",
         "danielstjules/stringy": "^2.3",
         "myclabs/php-enum": "^1.4"
+    },
+    "suggest": {
+      "ext-openssl": "The OpenSSL extension is needed to use the PayPal EWP functionality"
     },
     "autoload": {
       "psr-4": {

@@ -8,7 +8,6 @@ function newManagerForDebug()
     'debug' => true,
     'pdt_token' => getenv('PDT_TOKEN'),
     'business_id' => getenv('BUSINESS_ID'),
-    'forced_locale' => getenv('LOCALE'),
     'country' => getenv('COUNTRY'),
     'vendor' => getenv('VENDOR'),
     'ewp_cert' => realpath(getenv('EWP_CERT_FILE')),
