@@ -21,11 +21,10 @@ class Transaction extends NvpCollection
     }
   }
 
-  public static function fromResponseText($responseText)
+  public static function fromString($responseText)
   {
-    $lines = explode(static::LINE_SEPARATOR, trim($responseText));
-    $success = array_shift($lines) == static::SUCCESS;
-    return new static($success, implode(static::LINE_SEPARATOR, $lines));
+    $exploded = explode(static::LINE_SEPARATOR, trim($responseText), 2);
+    return new static($exploded[0] == static::SUCCESS, $exploded[1]);
   }
 
   public function isSuccessful()

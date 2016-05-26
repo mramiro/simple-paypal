@@ -28,4 +28,15 @@ abstract class Base extends Button
     $this->cmd = '_cart';
     parent::__construct($items);
   }
+
+  public function setDiscount($discount, $relative = false)
+  {
+    if ($relative) {
+      $this->discount_rate_cart = $discount;
+    }
+    else {
+      $this->discounte_amount_cart = $discount;
+    }
+    return $this;
+  }
 }

@@ -15,14 +15,14 @@ class TransactionTest extends PHPUnit_Framework_TestCase
   public function testCreationFromString()
   {
     // Test a successful reply
-    $t = Transaction::fromResponseText($this->successResponse);
+    $t = Transaction::fromString($this->successResponse);
     $this->assertTrue($t->isSuccessful());
     $this->assertEquals(10.5, $t->keynumber3);
     $this->assertEquals('Ms. &y(ampersandy) is the nicest puppy ever', $t->urlencoded);
     $this->assertEquals(trim($this->successResponse), (string)$t);
 
     // Test a failure reply
-    $t = Transaction::fromResponseText($this->failResponse);
+    $t = Transaction::fromString($this->failResponse);
     $this->assertFalse($t->isSuccessful());
     $this->assertGreaterThan(0, $t->getErrors());
     $this->assertEquals(trim($this->failResponse), (string)$t);

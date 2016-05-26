@@ -76,7 +76,7 @@ class Manager extends Configurable
       'tx' => $transactionId,
       'at' => $this->getPdtToken()
     ));
-    if ($transaction = PDT\Transaction::fromResponseText($response)) {
+    if ($transaction = PDT\Transaction::fromString($response)) {
       return $transaction;
     }
     else {
@@ -88,27 +88,24 @@ class Manager extends Configurable
 
   public function createUploadCartButton(array $items = array())
   {
-    $cart = new Html\Carts\UploadCart(array(
-      'currency_code' => $this->getCurrency(),
-      'business' => $this->getBusinessId(),
-    ));
-    $cart = $this->decorateButton($cart);
+    $cart = $this->decorateButton(new Html\Carts\UploadCart());
     $cart->setItems($items);
     return $cart;
   }
 
   protected function decorateButton(Button $btn)
   {
+    Button::conform();
     $btn->setFormAction($this->getEndpoint());
+    $btn->business = $this->getBusinessId();
+    $btn->currency_code = $this->getCurrency();
     if (isset($this->forcedLocale)) {
-      try {
-        $btn->lc = $this->forcedLocale;
-      }
-      catch (\UnexpectedValueException $e){}
+      $btn->lc = $this->forcedLocale;
     }
     if (isset($this->country) && isset($this->vendor)) {
       $btn->setBuildNotation($this->vendor, $this->country);
     }
+    Button::complain();
     return $btn;
   }
 
@@ -123,10 +120,8 @@ class Manager extends Configurable
 
   public function encryptButton(Button $btn)
   {
-    $encrypted = new EWP\EncryptedButton($this->ewpCertId, $btn);
-    $encrypted->setFormAction($this->getEndpoint());
-    $encrypted->encrypt($this->getEncryptor());
-    return $encrypted;
+    $btn = $this->decorateButton(new EWP\EncryptedButton($this->ewpCertId, $btn));
+    return $btn->encrypt($this->getEncryptor());
   }
 
 }

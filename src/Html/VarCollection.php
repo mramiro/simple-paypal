@@ -6,6 +6,11 @@ class VarCollection extends ConstrainedCollection
 {
   protected static $allowed = array();
 
+  public function getVars()
+  {
+    return $this->items;
+  }
+
   protected function getAllowedVars()
   {
     return static::$allowed;

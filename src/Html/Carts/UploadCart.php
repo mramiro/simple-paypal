@@ -50,13 +50,6 @@ final class UploadCart extends Base
     return $this;
   }
 
-  public function setDiscount($discount, $relative = false)
-  {
-    return $relative ?
-      $this->set('discount_rate_cart', $discount) :
-      $this->set('discount_amount_cart', $discount);
-  }
-
   public function getVars()
   {
     $vars = parent::getVars();

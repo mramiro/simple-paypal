@@ -4,10 +4,6 @@ use SimplePaypal\Html\Button;
 
 class EncryptedButton extends Button
 {
-  protected static $allowed = array(
-    'cmd',
-    'encrypted'
-  );
   protected $certId;
   protected $innerButton;
 
@@ -20,14 +16,23 @@ class EncryptedButton extends Button
     }
   }
 
+  protected function getAllowedVars()
+  {
+    return array('cmd', 'encrypted');
+  }
+
+  final public function setBuildNotation($vendor, $country) {}
+
   public function setInnerButton(Button $btn)
   {
     $this->innerButton = $btn;
+    return $this;
   }
 
   public function encrypt(Encryptor $encryptor)
   {
     $this->encrypted = $encryptor->encrypt($this->varsToString());
+    return $this;
   }
 
   private function varsToString()

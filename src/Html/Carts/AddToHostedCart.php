@@ -1,5 +1,7 @@
 <?php namespace SimplePaypal\Html\Carts;
 
+use SimplePaypal\Html\Item;
+
 final class AddToHostedCart extends Base
 {
   protected static $allowed = array(
@@ -10,5 +12,16 @@ final class AddToHostedCart extends Base
   {
     parent::__construct($items);
     $this->add = true;
+  }
+
+  public function addItem(Item $item)
+  {
+    $this->item = $item;
+  }
+
+  public function getVars()
+  {
+    $vars = parent::getVars();
+    return array_merge(parent::getVars(), $this->item->getVars());
   }
 }

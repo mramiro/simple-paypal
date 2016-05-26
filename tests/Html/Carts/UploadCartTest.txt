@@ -1,4 +1,4 @@
-<form method="POST" action="http://endpoint.dummy.com">
+<form method="POST" action="http://endpoint.dummy.com" target="_blank">
 <input type="hidden" name="cmd" value="_cart">
 <input type="hidden" name="upload" value="1">
 <input type="hidden" name="currency_code" value="AUD">

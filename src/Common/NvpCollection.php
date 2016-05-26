@@ -9,7 +9,7 @@ class NvpCollection extends Collection
 
   public static function fromString($string)
   {
-    return new self(static::parseString($string));
+    return new static(static::parseString($string));
   }
 
   public function __construct($items = array())

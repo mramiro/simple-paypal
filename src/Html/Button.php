@@ -8,6 +8,7 @@ abstract class Button extends VarCollection
     'bn'
   );
   protected $formAction;
+  protected $formTarget = '_blank';
   protected $buttonType = '';
 
   protected function getAllowedVars()
@@ -27,11 +28,6 @@ abstract class Button extends VarCollection
     return $vars;
   }
 
-  public function getVars()
-  {
-    return $this->items;
-  }
-
   protected function createInputTag($name, $value, $type="hidden")
   {
     return "<input type=\"$type\" name=\"$name\" value=\"$value\">";
@@ -47,6 +43,11 @@ abstract class Button extends VarCollection
     $this->formAction = $action;
   }
 
+  public function setFormTarget($target)
+  {
+    $this->formTarget = $target;
+  }
+
   public function setBuildNotation($vendor, $country)
   {
     $this->bn = implode('_', array($vendor, $this->buttonType, 'WPS', $country));
@@ -55,7 +56,7 @@ abstract class Button extends VarCollection
   public function toHtmlForm($formatted = true)
   {
     $sep = $formatted ? PHP_EOL : '';
-    $html = "<form method=\"POST\" action=\"{$this->formAction}\">" . $sep;
+    $html = "<form method=\"POST\" action=\"{$this->formAction}\" target=\"{$this->formTarget}\">" . $sep;
     $html .= $this->createInnerHtml($formatted);
     $html .= $this->createInputTag('submit', 'Pay with Paypal', 'submit') . $sep;
     $html .= "</form>";
