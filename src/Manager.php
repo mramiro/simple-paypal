@@ -13,9 +13,8 @@ use SimplePaypal\Html\Button;
 class Manager extends Configurable
 {
   protected $pdtToken;
-  protected $debug;
   protected $httpClient;
-  protected $currency;
+  protected $currency = Constants::DEFAULT_CURRENCY;
   protected $businessId;
   protected $forcedLocale;
   protected $country;
@@ -23,29 +22,21 @@ class Manager extends Configurable
   protected $ewpCert, $ewpCertId, $ewpKey, $ewpKeyPass, $ewpPaypalCert;
 
   protected $ewpEncryptor;
+  protected $endpoint = Constants::ENDPOINT;
 
-  protected function getConfigOptions()
+  public function __construct(array $config = array(), $sandbox = false)
   {
-    return array(
-      'debug' => false,
-      'currency' => Constants::DEFAULT_CURRENCY,
-      'http_client' => function() { return new CurlHandler(); },
-      'pdt_token' => null,
-      'business_id' => null,
-      'forced_locale' => null,
-      'country' => null,
-      'vendor' => null,
-      'ewp_cert' => null,
-      'ewp_cert_id' => null,
-      'ewp_key' => null,
-      'ewp_key_pass' => null,
-      'ewp_paypal_cert' => null
-    );
+    if ($sandbox) {
+      $this->endpoint = str_replace('paypal', 'sandbox.paypal', $this->endpoint);
+    }
+    parent::__construct($config);
   }
 
-  public function getEndpoint()
+  protected function defaults()
   {
-    return $this->debug ? Constants::SANDBOX_ENDPOINT : Constants::ENDPOINT;
+    return array(
+      'http_client' => function() { return new CurlHandler(); }
+    );
   }
 
   public function setHttpClient(HttpClientInterface $client)
@@ -71,7 +62,7 @@ class Manager extends Configurable
   public function validatePdtTransaction($transactionId)
   {
     $client = $this->getHttpClient();
-    $response = $client->post($this->getEndpoint(), array(
+    $response = $client->post($this->endpoint, array(
       'cmd' => '_notify-synch',
       'tx' => $transactionId,
       'at' => $this->getPdtToken()
@@ -96,7 +87,7 @@ class Manager extends Configurable
   protected function decorateButton(Button $btn)
   {
     Button::conform();
-    $btn->setFormAction($this->getEndpoint());
+    $btn->setFormAction($this->endpoint);
     $btn->business = $this->getBusinessId();
     $btn->currency_code = $this->getCurrency();
     if (isset($this->forcedLocale)) {

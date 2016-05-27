@@ -2,82 +2,77 @@
 
 use Closure;
 use BadMethodCallException;
-use Stringy\Stringy as S;
 
-abstract class Configurable
+class Configurable
 {
-  // Must return an array in the form:
-  // [ 'config_item' => default_value, 'another_config_item' => null, ... ]
-  // The keys should be in snake_case.
-  // default_value can be any expression that evaluates to a value, even closures, wich would be
-  // executed. Such closures should have the following signature: function($self). A null value
-  // can be set for configuration options that do not have a default value
-  protected abstract function getConfigOptions();
-
-  // Every key in the array returned by getConfigOptions() must be mapped to a property with
-  // the same name in camelCase, e.g.:
-  // protected $configItem, $anotherConfigItem;
 
   public function __construct(array $options = array())
   {
-    $this->setDefaults(array_keys($options));
     $this->configure($options);
   }
 
-  protected function setDefaults(array $ignored)
+  /**
+   * Returns an array with the default values to be assigned to configuration options if such
+   * options are not provided at instantiation time
+   *
+   * The array must be in the form:
+   * [ 'config_item_1' => DEFAULT_VALUE_1, 'config_item_2' => DEFAULT_VALUE_2, ... ]
+   * DEFAULT_VALUE_N can be any expression that evaluates to a non null value. If a closure is
+   * provided, it will be executed during instantiation and its return value will be assigned to
+   * the correspoding option.
+   * Such closures should have the signature: function(array $options), where $options the array
+   * containing all the configuration options passed to configure()
+   *
+   * @return array An array with the config options as keys and their default values as values
+   */
+  protected function defaults()
   {
-    foreach ($this->getConfigOptions() as $key => $value) {
-      if (!in_array($key, $ignored) && !is_null($value)) {
-        $this->setConfigValue($key, $value);
-      }
-    }
+    return array();
   }
 
   protected function configure(array $options)
   {
-    foreach ($options as $key => $value) {
-      if (in_array($key, array_keys($this->getConfigOptions()))) {
-        $this->setConfigValue($key, $value);
+    foreach (array_merge($this->defaults(), $options) as $key => $value) {
+      $property = static::camelCase($key);
+      // If there's a concrete setConfigurationOption() method defined, we use it instead of doing
+      // a simple assignment.
+      // Note: We use method_exists() instead of is_callable() so __call isn't considered
+      $method = 'set'.ucfirst($property);
+      if (method_exists($this, $method)) {
+        $this->$method($this->dynamicValue($value, $options));
+      }
+      // Else, a property is only set if it is explicitly defined in the inherited class...
+      else if (property_exists($this, $property)) {
+        $this->$property = $this->dynamicValue($value, $options);
       }
     }
   }
 
-  protected function setConfigValue($key, $value)
+  // Manages "getConfigurationOption()" and "setConfigurationOption($value)"
+  public function __call($method, $args)
   {
-    $camelized = S::create($key)->camelize();
-    $methodName = 'set'. $camelized->upperCaseFirst();
-    // We use method_exists() instead of is_callable() so __call isn't considered, since it would
-    // do exactly the same as the else block here, wich is setting the property value directly.
-    // Therefore, this only goes through if there's en explicitly defined method (e.g. setMyVar()),
-    // this is the case if you want override the default behavior or conform to an interface
-    if (method_exists($this, $methodName)) {
-      $value = $value instanceof Closure ? $value($this) : $value;
-      return $this->$methodName($value);
-    }
-    // Also, a property is only set if it is explicitly defined in the inherited class
-    else if (property_exists($this, $camelized)) {
-      $value = $value instanceof Closure ? $value($this) : $value;
-      $this->$camelized = $value;
-    }
-  }
-
-  // Manages "getConfigItem()" and "setConfigItem($value)"
-  public function __call($methodName, $args)
-  {
-    $methodName = S::create($methodName);
-    $action = $methodName->first(3)->toLowerCase();
-    if ($action == 'get') {
-      $var = $methodName->slice(3)->lowerCaseFirst();
-      return property_exists($this, $var) ? $this->$var : null;
-    }
-    if ($action == 'set') {
-      $var = $methodName->slice(3)->lowerCaseFirst();
-      if (property_exists($this, $var)) {
-        $this->$var = $args[0];
+    $property = lcfirst(substr($method, 3));
+    if (property_exists($this, $property)) {
+      $action = substr($method, 0, 3);
+      if ($action == 'get') {
+        return $this->$property;
+      }
+      if ($action == 'set') {
+        $this->$property = $args[0];
         return $this;
       }
     }
     throw new BadMethodCallException;
+  }
+
+  private static function camelCase($str)
+  {
+    return lcfirst(str_replace(' ', '', ucwords(str_replace(array('-', '_'), ' ', $str))));
+  }
+
+  private function dynamicValue($expression, array $options = null)
+  {
+    return $expression instanceof Closure ? $expression($options) : $expression;
   }
 
 }

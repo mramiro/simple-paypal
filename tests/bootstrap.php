@@ -5,7 +5,6 @@ require __DIR__.'/../vendor/autoload.php';
 function newManagerForDebug()
 {
   return new SimplePaypal\Manager(array(
-    'debug' => true,
     'pdt_token' => getenv('PDT_TOKEN'),
     'business_id' => getenv('BUSINESS_ID'),
     'country' => getenv('COUNTRY'),
@@ -14,7 +13,7 @@ function newManagerForDebug()
     'ewp_key' => realpath(getenv('EWP_KEY_FILE')),
     'ewp_paypal_cert' => realpath(getenv('EWP_PAYPAL_CERT_FILE')),
     'ewp_cert_id' => getenv('EWP_CERT_ID')
-  ));
+  ), true);
 }
 
 $de = new Dotenv\Dotenv(__DIR__);

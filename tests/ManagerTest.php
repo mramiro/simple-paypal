@@ -22,12 +22,11 @@ class ManagerTest extends PHPUnit_Framework_TestCase
     // Test custom values
     $httpClient = Mockery::mock('SimplePaypal\Transport\HttpClientInterface');
     $manager = new Manager(array(
-      'debug' => true,
       'pdt_token' => 'dummy',
       'http_client' => $httpClient,
       'currency' => Currency::MEXICAN_PESO
-    ));
-    $this->assertEquals(Constants::SANDBOX_ENDPOINT, $manager->getEndpoint());
+    ), true);
+    $this->assertContains('sandbox.paypal.com', $manager->getEndpoint());
     $this->assertEquals('dummy', $manager->getPdtToken());
     $this->assertEquals($httpClient, $manager->getHttpClient());
     $this->assertEquals(Currency::MEXICAN_PESO, $manager->getCurrency());

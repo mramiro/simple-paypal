@@ -11,7 +11,6 @@
     "require": {
         "php": ">=5.3",
         "ext-curl": "*",
-        "danielstjules/stringy": "^2.3",
         "myclabs/php-enum": "^1.4"
     },
     "suggest": {
