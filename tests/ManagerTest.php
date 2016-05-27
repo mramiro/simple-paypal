@@ -2,7 +2,6 @@
 
 use SimplePaypal\Manager;
 use SimplePaypal\Common\Constants;
-use SimplePaypal\Common\Types\Currency;
 
 class ManagerTest extends PHPUnit_Framework_TestCase
 {
@@ -15,21 +14,17 @@ class ManagerTest extends PHPUnit_Framework_TestCase
     $this->assertInstanceOf('SimplePaypal\Transport\CurlHandler', $manager->getHttpClient());
     $this->assertEquals(Constants::DEFAULT_CURRENCY, $manager->getCurrency());
 
-    // Test invalid values
-    $this->expectException('UnexpectedValueException');
-    $manager->setCurrency('WTF'); // Invalid currency code.
-
     // Test custom values
     $httpClient = Mockery::mock('SimplePaypal\Transport\HttpClientInterface');
     $manager = new Manager(array(
       'pdt_token' => 'dummy',
       'http_client' => $httpClient,
-      'currency' => Currency::MEXICAN_PESO
+      'currency' => 'MXN'
     ), true);
     $this->assertContains('sandbox.paypal.com', $manager->getEndpoint());
     $this->assertEquals('dummy', $manager->getPdtToken());
     $this->assertEquals($httpClient, $manager->getHttpClient());
-    $this->assertEquals(Currency::MEXICAN_PESO, $manager->getCurrency());
+    $this->assertEquals('MXN', $manager->getCurrency());
   }
 
   public function testPdtTransactionValidation()

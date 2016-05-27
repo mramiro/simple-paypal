@@ -10,8 +10,7 @@
     ],
     "require": {
         "php": ">=5.3",
-        "ext-curl": "*",
-        "myclabs/php-enum": "^1.4"
+        "ext-curl": "*"
     },
     "suggest": {
       "ext-openssl": "The OpenSSL extension is needed to use the PayPal EWP functionality"

@@ -3,9 +3,6 @@
 use RuntimeException;
 use SimplePaypal\Support\Configurable;
 use SimplePaypal\Common\Constants;
-use SimplePaypal\Common\Types\Currency;
-use SimplePaypal\Common\Types\Country;
-use SimplePaypal\Common\Types\Locale;
 use SimplePaypal\Transport\HttpClientInterface;
 use SimplePaypal\Transport\CurlHandler;
 use SimplePaypal\Html\Button;
@@ -42,21 +39,6 @@ class Manager extends Configurable
   public function setHttpClient(HttpClientInterface $client)
   {
     $this->httpClient = $client;
-  }
-
-  public function setCurrency($currency)
-  {
-    $this->currency = $currency instanceof Currency ? $currency : new Currency($currency);
-  }
-
-  public function setForcedLocale($locale)
-  {
-    $this->forcedLocale = $locale instanceof Locale ? $locale : new Locale($locale);
-  }
-
-  public function setCountry($country)
-  {
-    $this->country = $country instanceof Country ? $country : new Country($country);
   }
 
   public function validatePdtTransaction($transactionId)
