@@ -7,6 +7,8 @@ abstract class Button extends VarCollection
     'notify_url',
     'bn'
   );
+  protected $renderer;
+  protected $label = 'Pay with Paypal';
   protected $formAction;
   protected $formTarget = '_blank';
   protected $buttonType = '';
@@ -28,16 +30,6 @@ abstract class Button extends VarCollection
     return $vars;
   }
 
-  protected function createInputTag($name, $value, $type="hidden")
-  {
-    return "<input type=\"$type\" name=\"$name\" value=\"$value\">";
-  }
-
-  public function __toString()
-  {
-    return $this->toHtmlForm(false);
-  }
-
   public function setFormAction($action)
   {
     $this->formAction = $action;
@@ -53,24 +45,17 @@ abstract class Button extends VarCollection
     $this->bn = implode('_', array($vendor, $this->buttonType, 'WPS', $country));
   }
 
-  public function toHtmlForm($formatted = true)
+  public function toHtmlForm()
   {
-    $sep = $formatted ? PHP_EOL : '';
-    $html = "<form method=\"POST\" action=\"{$this->formAction}\" target=\"{$this->formTarget}\">" . $sep;
-    $html .= $this->createInnerHtml($formatted);
-    $html .= $this->createInputTag('submit', 'Pay with Paypal', 'submit') . $sep;
-    $html .= "</form>";
+    ob_start();
+    include __DIR__.'/template.php';
+    $html = ob_get_contents();
+    ob_end_clean();
     return $html;
   }
 
-  protected function createInnerHtml($formatted = true)
+  public function __toString()
   {
-    $sep = $formatted ? PHP_EOL : '';
-    $html = '';
-    foreach ($this->getVars() as $key => $value) {
-      $html .= $this->createInputTag($key, $value) . $sep;
-    }
-    return $html;
+    return $this->toHtmlForm();
   }
-
 }
