@@ -1,4 +1,4 @@
-<?php namespace SimplePaypal\Html;
+<?php namespace SimplePaypal\Buttons;
 
 abstract class Button extends VarCollection
 {

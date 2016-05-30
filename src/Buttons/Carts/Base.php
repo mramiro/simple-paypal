@@ -1,6 +1,6 @@
-<?php namespace SimplePaypal\Html\Carts;
+<?php namespace SimplePaypal\Buttons\Carts;
 
-use SimplePaypal\Html\Button;
+use SimplePaypal\Buttons\Button;
 
 abstract class Base extends Button
 {

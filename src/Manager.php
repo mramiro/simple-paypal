@@ -5,7 +5,7 @@ use SimplePaypal\Support\Configurable;
 use SimplePaypal\Common\Constants;
 use SimplePaypal\Transport\HttpClientInterface;
 use SimplePaypal\Transport\CurlHandler;
-use SimplePaypal\Html\Button;
+use SimplePaypal\Buttons\Button;
 
 class Manager extends Configurable
 {
@@ -61,7 +61,7 @@ class Manager extends Configurable
 
   public function createUploadCartButton(array $items = array())
   {
-    $cart = $this->decorateButton(new Html\Carts\UploadCart());
+    $cart = $this->decorateButton(new Buttons\Carts\UploadCart());
     $cart->setItems($items);
     return $cart;
   }

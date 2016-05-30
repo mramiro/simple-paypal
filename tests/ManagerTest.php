@@ -43,7 +43,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
   {
     $manager = newManagerForDebug();
     $cart = $manager->createUploadCartButton();
-    $this->assertInstanceOf('SimplePaypal\Html\Carts\UploadCart', $cart);
+    $this->assertInstanceOf('SimplePaypal\Buttons\Carts\UploadCart', $cart);
     $this->assertEquals($manager->getBusinessId(), $cart->business);
   }
 

@@ -1,8 +1,8 @@
-<?php namespace SimplePaypal\Html\Carts;
+<?php namespace SimplePaypal\Buttons\Carts;
 
-use SimplePaypal\Html\Item;
-use SimplePaypal\Html\CheckoutPage;
-use SimplePaypal\Html\AutomaticFillout;
+use SimplePaypal\Buttons\Item;
+use SimplePaypal\Buttons\CheckoutPage;
+use SimplePaypal\Buttons\AutomaticFillout;
 
 final class UploadCart extends Base
 {

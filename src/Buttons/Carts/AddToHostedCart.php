@@ -1,6 +1,6 @@
-<?php namespace SimplePaypal\Html\Carts;
+<?php namespace SimplePaypal\Buttons\Carts;
 
-use SimplePaypal\Html\Item;
+use SimplePaypal\Buttons\Item;
 
 final class AddToHostedCart extends Base
 {

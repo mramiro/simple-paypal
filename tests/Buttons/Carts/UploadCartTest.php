@@ -1,7 +1,7 @@
 <?php
 
-use SimplePaypal\Html\Carts\UploadCart;
-use SimplePaypal\Html\Item;
+use SimplePaypal\Buttons\Carts\UploadCart;
+use SimplePaypal\Buttons\Item;
 
 class UploadCartTest extends PHPUnit_Framework_TestCase
 {

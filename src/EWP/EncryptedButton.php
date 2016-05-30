@@ -1,6 +1,6 @@
 <?php namespace SimplePaypal\EWP;
 
-use SimplePaypal\Html\Button;
+use SimplePaypal\Buttons\Button;
 
 class EncryptedButton extends Button
 {
