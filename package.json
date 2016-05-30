@@ -1,0 +1,23 @@
+{
+  "name": "simple-paypal",
+  "version": "0.1.0",
+  "description": "The simplest PayPal Payments Standard interface I could come up with",
+  "main": "false",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "less": "^2.7.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/mramiro/simple-paypal.git"
+  },
+  "author": "Miguel Ramiro <miguel@mramiro.com>",
+  "license": "MIT",
+  "homepage": "https://bitbucket.org/mramiro/simple-paypal#readme"
+}
