@@ -48,7 +48,7 @@ abstract class Button extends VarCollection
   public function toHtmlForm()
   {
     ob_start();
-    include __DIR__.'/template.php';
+    include __DIR__.'/theme/template.php';
     $html = ob_get_contents();
     ob_end_clean();
     return $html;
