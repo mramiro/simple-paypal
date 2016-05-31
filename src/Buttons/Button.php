@@ -2,6 +2,7 @@
 
 use Twig_Environment;
 use Twig_Loader_Filesystem;
+use SimplePaypal\Common\Constants;
 
 abstract class Button extends VarCollection
 {
@@ -16,9 +17,9 @@ abstract class Button extends VarCollection
   protected $formAction;
   protected $formTarget = '_blank';
   protected $buttonType = '';
-  protected $buttonLabel = 'Pay with Paypal';
+  protected $buttonLabel = 'Pay with {wordmark}';
   protected $buttonSize = 'large';
-  protected $buttonStyle = null;
+  protected $buttonStyle = 'legacy';
 
   protected function getAllowedVars()
   {
@@ -52,20 +53,41 @@ abstract class Button extends VarCollection
     $this->bn = implode('_', array($vendor, $this->buttonType, 'WPS', $country));
   }
 
-  public function toHtmlForm()
+  public function setStyle($style)
   {
-    if (!isset($this->renderer)) {
-      $this->renderer = new Twig_Environment(new Twig_Loader_Filesystem(static::TEMPLATE_DIR));
-    }
+    $this->buttonStyle = $style;
+  }
+
+  public function setSize($size)
+  {
+    $this->buttonSize = $size;
+  }
+
+  protected function buildRenderingParams()
+  {
     $params = array(
       'action' => $this->formAction,
       'target' => $this->formTarget,
       'vars' => $this->getVars(),
       'size' => $this->buttonSize,
       'style' => $this->buttonStyle,
-      'label' => $this->buttonLabel,
     );
-    return $this->renderer->render('template.twig', $params);
+    $replace = 'PayPal';
+    if ($this->buttonStyle == 'primary' || $this->buttonStyle == 'secondary') {
+      $params['logo'] = Constants::PP_LOGO;
+      $img = $this->buttonStyle == 'primary' ? Constants::PP_WORDMARK : Constants::PP_WORDMARK2;
+      $replace = '<img src="'. $img .'" alt="PayPal">';
+    }
+    $params['label'] = preg_replace('/\{wordmark\}/', $replace, $this->buttonLabel);
+    return $params;
+  }
+
+  public function toHtmlForm()
+  {
+    if (!isset($this->renderer)) {
+      $this->renderer = new Twig_Environment(new Twig_Loader_Filesystem(static::TEMPLATE_DIR));
+    }
+    return $this->renderer->render('form.twig', $this->buildRenderingParams());
   }
 
   public function __toString()

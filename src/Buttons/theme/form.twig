@@ -1,0 +1,6 @@
+<form class="paypal-button" method="POST" action="{{ action }}" target="{{ target }}">
+{% for key, value in vars %}
+  <input type="hidden" name="{{ key }}" value="{{ value }}">
+{% endfor %}
+  {% include style == 'legacy' ? 'button.twig' : 'button-new.twig' %}
+</form>
