@@ -1,0 +1,11 @@
+<form method="POST" action="{{ action }}" target="{{ target }}">
+{% for key, value in vars %}
+  <input type="hidden" name="{{ key }}" value="{{ value }}">
+{% endfor %}
+  <button class="paypal-button paypal-style-{{ style }} paypal-size-{{ size }}" type="submit">
+    <div class="paypal-button-side">
+      <span class="paypal-button-logo"></span>
+    </div><div class="paypal-button-content">{{ label|raw }}
+    </div>
+  </button>
+</form>

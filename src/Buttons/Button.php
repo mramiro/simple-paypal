@@ -2,11 +2,10 @@
 
 use Twig_Environment;
 use Twig_Loader_Filesystem;
-use SimplePaypal\Common\Constants;
 
 abstract class Button extends VarCollection
 {
-  const TEMPLATE_DIR = __DIR__.'/theme';
+  const TEMPLATE_DIR = __DIR__.'/template';
 
   protected static $allowed = array(
     'cmd',
@@ -18,8 +17,8 @@ abstract class Button extends VarCollection
   protected $formTarget = '_blank';
   protected $buttonType = '';
   protected $buttonLabel = 'Pay with {wordmark}';
-  protected $buttonSize = 'large';
-  protected $buttonStyle = 'legacy';
+  protected $buttonSize = 'medium';
+  protected $buttonStyle = 'blue';
 
   protected function getAllowedVars()
   {
@@ -63,35 +62,25 @@ abstract class Button extends VarCollection
     $this->buttonSize = $size;
   }
 
-  protected function buildRenderingParams()
-  {
-    $params = array(
-      'action' => $this->formAction,
-      'target' => $this->formTarget,
-      'vars' => $this->getVars(),
-      'size' => $this->buttonSize,
-      'style' => $this->buttonStyle,
-    );
-    $replace = 'PayPal';
-    if ($this->buttonStyle == 'primary' || $this->buttonStyle == 'secondary') {
-      $params['logo'] = Constants::PP_LOGO;
-      $img = $this->buttonStyle == 'primary' ? Constants::PP_WORDMARK : Constants::PP_WORDMARK2;
-      $replace = '<img src="'. $img .'" alt="PayPal">';
-    }
-    $params['label'] = preg_replace('/\{wordmark\}/', $replace, $this->buttonLabel);
-    return $params;
-  }
-
-  public function toHtmlForm()
+  public function render($size = null, $style = null)
   {
     if (!isset($this->renderer)) {
       $this->renderer = new Twig_Environment(new Twig_Loader_Filesystem(static::TEMPLATE_DIR));
     }
-    return $this->renderer->render('form.twig', $this->buildRenderingParams());
+    $replace = '<span class="paypal-button-wordmark">PayPal</span>';
+    $params = array(
+      'action' => $this->formAction,
+      'target' => $this->formTarget,
+      'vars' => $this->getVars(),
+      'size' => $size ? : $this->buttonSize,
+      'style' => $style ? : $this->buttonStyle,
+      'label' => preg_replace('/\{wordmark\}/', $replace, $this->buttonLabel)
+    );
+    return $this->renderer->render('button.twig', $params);
   }
 
   public function __toString()
   {
-    return $this->toHtmlForm();
+    return $this->render();
   }
 }

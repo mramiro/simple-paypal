@@ -1,0 +1,47 @@
+.text-to-img(@image-url) {
+  text-indent: 100%; // "hide" the text
+  display: inline-block;
+  vertical-align: middle;
+  background: url(@image-url);
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.paypal-button {
+  white-space: nowrap;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  background: 0;
+  border: 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: antialiased;
+  cursor: pointer;
+  z-index: 0;
+
+  .paypal-button-content {
+    display: inline-block;
+    border: 1px solid transparent;
+    border-radius: 0 3px 3px 0;
+  }
+
+  &.paypal-style-yellow {
+    @import "themes/yellow";
+  }
+  &.paypal-style-blue {
+    @import "themes/blue";
+  }
+
+  &.paypal-size-small {
+    @import "sizes/small";
+  }
+  &.paypal-size-medium {
+    @import "sizes/medium";
+  }
+  &.paypal-size-large {
+    @import "sizes/large";
+  }
+
+}
