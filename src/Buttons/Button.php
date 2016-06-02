@@ -67,7 +67,7 @@ abstract class Button extends VarCollection
     if (!isset($this->renderer)) {
       $this->renderer = new Twig_Environment(new Twig_Loader_Filesystem(static::TEMPLATE_DIR));
     }
-    $replace = '<span class="paypal-button-wordmark">PayPal</span>';
+    $replace = '<span class="sp-button-wordmark">PayPal</span>';
     $params = array(
       'action' => $this->formAction,
       'target' => $this->formTarget,

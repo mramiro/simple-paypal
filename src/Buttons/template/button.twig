@@ -2,10 +2,10 @@
 {% for key, value in vars %}
   <input type="hidden" name="{{ key }}" value="{{ value }}">
 {% endfor %}
-  <button class="paypal-button paypal-style-{{ style }} paypal-size-{{ size }}" type="submit">
-    <div class="paypal-button-side">
-      <span class="paypal-button-logo"></span>
-    </div><div class="paypal-button-content">{{ label|raw }}
+  <button class="sp-button sp-button-style-{{ style }} sp-button-size-{{ size }}" type="submit">
+    <div class="sp-button-side">
+      <span class="sp-button-logo"></span>
+    </div><div class="sp-button-content">{{ label|raw }}
     </div>
   </button>
 </form>
