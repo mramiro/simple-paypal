@@ -4,6 +4,7 @@ use SimplePaypal\Buttons\Button;
 
 class EncryptedButton extends Button
 {
+  protected $buttonLabel = null;
   protected $certId;
   protected $innerButton;
 
@@ -27,6 +28,11 @@ class EncryptedButton extends Button
   {
     $this->innerButton = $btn;
     return $this;
+  }
+
+  public function getLabel()
+  {
+    return isset($this->buttonLabel) ? $this->buttonLabel : $this->innerButton->getLabel();
   }
 
   public function encrypt(Encryptor $encryptor)

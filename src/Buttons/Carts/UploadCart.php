@@ -9,6 +9,7 @@ final class UploadCart extends Base
   protected static $allowed = array(
     'upload'
   );
+  protected $buttonLabel = "Check out with {paypal}";
   protected $cartItems = array();
 
   protected function getAllowedVars()

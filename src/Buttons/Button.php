@@ -17,7 +17,7 @@ abstract class Button extends VarCollection
   protected $formAction;
   protected $formTarget = '_blank';
   protected $buttonType = '';
-  protected $buttonLabel = 'Pay with {wordmark}';
+  protected $buttonLabel = 'Pay with {paypal}';
   protected $buttonSize = 'medium';
   protected $buttonStyle = 'blue';
 
@@ -53,6 +53,16 @@ abstract class Button extends VarCollection
     $this->bn = implode('_', array($vendor, $this->buttonType, 'WPS', $country));
   }
 
+  public function setLabel($label)
+  {
+    $this->buttonLabel = $label;
+  }
+
+  public function getLabel()
+  {
+    return $this->buttonLabel;
+  }
+
   public function setStyle($style)
   {
     $this->buttonStyle = $style;
@@ -75,7 +85,7 @@ abstract class Button extends VarCollection
       'vars' => $this->getVars(),
       'size' => $size ? : $this->buttonSize,
       'style' => $style ? : $this->buttonStyle,
-      'label' => preg_replace('/\{wordmark\}/', $replace, $this->buttonLabel)
+      'label' => preg_replace('/\{paypal\}/', $replace, $this->getLabel())
     );
     return $this->renderer->render('button.twig', $params);
   }
