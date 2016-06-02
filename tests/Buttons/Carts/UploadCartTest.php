@@ -29,7 +29,9 @@ class UploadCartTest extends PHPUnit_Framework_TestCase
       $items[] = $new;
     }
     $cart->addItems($items);
-    $expected = file_get_contents(__DIR__.'/UploadCartTest.txt');
-    $this->assertEquals(trim($expected), $cart->toHtmlForm());
+    $rendered = trim($cart->render());
+    $this->assertStringStartsWith('<form', $rendered);
+    $this->assertContains($this->items[0]->name, $rendered);
+    $this->assertStringEndsWith('</form>', $rendered);
   }
 }
