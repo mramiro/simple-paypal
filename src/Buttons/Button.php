@@ -2,6 +2,7 @@
 
 use Twig_Environment;
 use Twig_Loader_Filesystem;
+use SimplePaypal\Common\VarCollection;
 
 abstract class Button extends VarCollection
 {

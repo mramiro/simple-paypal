@@ -1,4 +1,4 @@
-<?php namespace SimplePaypal\Buttons;
+<?php namespace SimplePaypal\Common;
 
 class Item extends VarCollection
 {
@@ -30,12 +30,11 @@ class Item extends VarCollection
     'option_amount1'
   );
 
-  public function  __construct($id, $name, $amount, array $extra = array())
+  public function  __construct($name, $amount, $qty = 1, array $extra = array())
   {
-    $this->item_number = $id;
     $this->item_name = $name;
     $this->amount = $amount;
-    $this->quantity = 1;
+    $this->quantity = $qty;
     parent::__construct($extra);
   }
 

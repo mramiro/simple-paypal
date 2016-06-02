@@ -1,7 +1,7 @@
 <?php
 
 use SimplePaypal\Buttons\Carts\UploadCart;
-use SimplePaypal\Buttons\Item;
+use SimplePaypal\Common\Item;
 
 class UploadCartTest extends PHPUnit_Framework_TestCase
 {
@@ -22,11 +22,7 @@ class UploadCartTest extends PHPUnit_Framework_TestCase
     $cart->business = $this->config->business;
     $items = array();
     foreach ($this->items as $item) {
-      $new = new Item($item->id, $item->name, $item->price);
-      if (isset($item->qty)) {
-        $new->quantity = $item->qty;
-      }
-      $items[] = $new;
+      $items[] = new Item($item->name, $item->price, isset($item->qty) ? $item->qty : 1);
     }
     $cart->addItems($items);
     $rendered = trim($cart->render());

@@ -1,4 +1,4 @@
-<?php namespace SimplePaypal\Buttons;
+<?php namespace SimplePaypal\Common;
 
 use SimplePaypal\Support\ConstrainedCollection;
 

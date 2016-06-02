@@ -1,6 +1,6 @@
 <?php namespace SimplePaypal\Buttons\Carts;
 
-use SimplePaypal\Buttons\Item;
+use SimplePaypal\Common\Item;
 use SimplePaypal\Buttons\CheckoutPage;
 use SimplePaypal\Buttons\AutomaticFillout;
 
