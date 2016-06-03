@@ -6,8 +6,6 @@ use SimplePaypal\Common\VarCollection;
 
 abstract class Button extends VarCollection
 {
-  const TEMPLATE_DIR = __DIR__.'/template';
-
   protected static $allowed = array(
     'cmd',
     'notify_url',
@@ -76,7 +74,7 @@ abstract class Button extends VarCollection
   public function render($size = null, $style = null)
   {
     if (!isset($this->renderer)) {
-      $this->renderer = new Twig_Environment(new Twig_Loader_Filesystem(static::TEMPLATE_DIR));
+      $this->renderer = new Twig_Environment(new Twig_Loader_Filesystem(__DIR__.'/template'));
     }
     $replace = '<span class="sp-button-wordmark">PayPal</span>';
     $params = array(
