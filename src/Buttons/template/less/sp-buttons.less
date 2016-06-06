@@ -7,7 +7,11 @@
   background-size: contain;
 }
 
+@import "themes/blue";
+@import "themes/yellow";
+
 .sp-button {
+  display: block;
   white-space: nowrap;
   overflow: hidden;
   margin: 0;
@@ -21,27 +25,32 @@
   cursor: pointer;
   z-index: 0;
 
-  .sp-button-content {
-    display: inline-block;
-    border: 1px solid transparent;
-    border-radius: 0 3px 3px 0;
-  }
-
-  &.sp-button-style-yellow {
-    @import "themes/yellow";
-  }
-  &.sp-button-style-blue {
-    @import "themes/blue";
-  }
-
   &.sp-button-size-small {
     @import "sizes/small";
+    &.sp-button-style-blue {
+      .blue-theme();
+    }
+    &.sp-button-style-yellow {
+      .yellow-theme();
+    }
   }
   &.sp-button-size-medium {
     @import "sizes/medium";
+    &.sp-button-style-blue {
+      .blue-theme();
+    }
+    &.sp-button-style-yellow {
+      .yellow-theme();
+    }
   }
   &.sp-button-size-large {
     @import "sizes/large";
+    &.sp-button-style-blue {
+      .blue-theme();
+    }
+    &.sp-button-style-yellow {
+      .yellow-theme();
+    }
   }
 
 }

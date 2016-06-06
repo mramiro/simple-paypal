@@ -1,3 +1,4 @@
 .env
 /certs/*
 !/certs/paypal_cert*.pem
+/sp-buttons.css

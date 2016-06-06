@@ -7,18 +7,23 @@ var autoprefixer = require('gulp-autoprefixer');
 var lessPath = 'src/Buttons/template/less';
 var lessEntry = lessPath + '/*.less';
 var lessAll = lessPath + '/**/*.less';
-var buildPath = 'dist';
 
-gulp.task('css', function(){
+gulp.task('dist-css', function(){
+  return gulp.src(lessEntry)
+    .pipe(less())
+    .pipe(autoprefixer({ browsers: ['last 2 versions'] }))
+    .pipe(cleancss())
+    .pipe(rename({ suffix: '.min' }))
+    .pipe(gulp.dest('dist'));
+});
+
+gulp.task('css', function() {
   return gulp.src(lessEntry)
     .pipe(less()).on('error', function(error) {
       console.log(error.toString());
       this.emit('end');
     })
-    .pipe(autoprefixer({ browsers: ['last 2 versions'] }))
-    .pipe(cleancss())
-    .pipe(rename({ suffix: '.min' }))
-    .pipe(gulp.dest(buildPath));
+    .pipe(gulp.dest('tests'));
 });
 
 gulp.task('watch', function() {
