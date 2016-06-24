@@ -14,17 +14,17 @@ class Transaction extends NvpCollection
   {
     $this->success = $success;
     if ($success) {
-      parent::__construct($items);
+      return parent::__construct($items);
     }
-    else {
-      $this->parseErrors($items);
-    }
+    $this->parseErrors($items);
   }
 
   public static function fromString($responseText)
   {
     $exploded = explode(static::LINE_SEPARATOR, trim($responseText), 2);
-    return new static($exploded[0] == static::SUCCESS, $exploded[1]);
+    $status = $exploded[0];
+    $lines = isset($exploded[1]) ? $exploded[1] : '';
+    return new static($status == static::SUCCESS, $lines);
   }
 
   public function isSuccessful()
@@ -57,12 +57,9 @@ class Transaction extends NvpCollection
 
   public function __toString()
   {
-    if ($this->isSuccessful()) {
-      return static::SUCCESS . static::LINE_SEPARATOR . parent::__toString();
-    }
-    else {
-      return static::FAIL . static::LINE_SEPARATOR . $this->renderErrors();
-    }
+    return $this->isSuccessful()
+      ? static::SUCCESS . static::LINE_SEPARATOR . parent::__toString()
+      : static::FAIL . static::LINE_SEPARATOR . $this->renderErrors();
   }
 
 }

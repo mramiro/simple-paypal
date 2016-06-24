@@ -46,6 +46,9 @@ class CurlHandler implements HttpClientInterface
   {
     $response = curl_exec($curlHandler);
     curl_close($curlHandler);
+    if ($response === false) {
+      throw new HttpException();
+    }
     return $response;
   }
 

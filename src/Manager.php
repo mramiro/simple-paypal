@@ -43,20 +43,8 @@ class Manager extends Configurable
 
   public function validatePdtTransaction($transactionId)
   {
-    $client = $this->getHttpClient();
-    $response = $client->post($this->endpoint, array(
-      'cmd' => '_notify-synch',
-      'tx' => $transactionId,
-      'at' => $this->getPdtToken()
-    ));
-    if ($transaction = PDT\Transaction::fromString($response)) {
-      return $transaction;
-    }
-    else {
-      throw new RuntimeException(
-        'Could not obtain transaction information from Paypal. Transaction id = ' . $transactionId
-      );
-    }
+    $validator = new PDT\Validator($this->getPdtToken(), $this->getHttpClient(), $this->endpoint);
+    return $validator->validate($transactionId);
   }
 
   public function createUploadCartButton(array $items = array())
