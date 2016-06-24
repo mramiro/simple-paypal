@@ -1,6 +1,6 @@
 <?php
 
-use SimplePaypal\Transport\CurlHandler;
+use SimplePaypal\Http\CurlHandler;
 
 class CurlHandlerTest extends PHPUnit_Framework_TestCase
 {

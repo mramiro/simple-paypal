@@ -3,8 +3,8 @@
 use RuntimeException;
 use SimplePaypal\Support\Configurable;
 use SimplePaypal\Common\Constants;
-use SimplePaypal\Transport\HttpClientInterface;
-use SimplePaypal\Transport\CurlHandler;
+use SimplePaypal\Http\HttpClientInterface;
+use SimplePaypal\Http\CurlHandler;
 use SimplePaypal\Buttons\Button;
 
 class Manager extends Configurable

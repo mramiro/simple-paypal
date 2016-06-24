@@ -1,7 +1,7 @@
 <?php namespace SimplePaypal\PDT;
 
-use SimplePaypal\Transport\HttpClientInterface;
-use SimplePaypal\Transport\HttpException;
+use SimplePaypal\Http\HttpClientInterface;
+use SimplePaypal\Http\HttpException;
 
 class Validator
 {

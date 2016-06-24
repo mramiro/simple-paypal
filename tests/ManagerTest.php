@@ -11,11 +11,11 @@ class ManagerTest extends PHPUnit_Framework_TestCase
     $manager = new Manager();
     $this->assertEquals(Constants::ENDPOINT, $manager->getEndpoint());
     $this->assertNull($manager->getPdtToken());
-    $this->assertInstanceOf('SimplePaypal\Transport\CurlHandler', $manager->getHttpClient());
+    $this->assertInstanceOf('SimplePaypal\Http\CurlHandler', $manager->getHttpClient());
     $this->assertEquals(Constants::DEFAULT_CURRENCY, $manager->getCurrency());
 
     // Test custom values
-    $httpClient = Mockery::mock('SimplePaypal\Transport\HttpClientInterface');
+    $httpClient = Mockery::mock('SimplePaypal\Http\HttpClientInterface');
     $manager = new Manager(array(
       'pdt_token' => 'dummy',
       'http_client' => $httpClient,

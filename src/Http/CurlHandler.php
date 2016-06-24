@@ -1,4 +1,4 @@
-<?php namespace SimplePaypal\Transport;
+<?php namespace SimplePaypal\Http;
 
 class CurlHandler implements HttpClientInterface
 {
