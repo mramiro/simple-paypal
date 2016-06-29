@@ -8,11 +8,19 @@ class NodejsHandler extends ExternalHandler
 
   protected function getCommand()
   {
+    if (($cmd = static::getNode()) === false) {
+      throw new RuntimeException("Node.js not found.");
+    }
+    return $cmd;
+  }
+
+  protected static function getNode()
+  {
     if (!isset(static::$path)) {
       $finder = strtoupper(substr(php_uname('s'), 0, 3)) == 'WIN' ? 'where' : 'which';
       exec("$finder node", $output, $return);
       if ($return != 0 || !$output) {
-        throw new RuntimeException("Node.js not found.");
+        return false;
       }
       static::$path = $output[0];
     }
@@ -25,5 +33,10 @@ class NodejsHandler extends ExternalHandler
       $config['debug'] = true;
     }
     return __DIR__ . '/client.js' . ' ' . escapeshellarg(json_encode($config));
+  }
+
+  public static function checkCompatibility()
+  {
+    return static::getNode() != false;
   }
 }

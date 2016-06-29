@@ -4,7 +4,6 @@ use RuntimeException;
 use SimplePaypal\Support\Configurable;
 use SimplePaypal\Common\Constants;
 use SimplePaypal\Http\HttpClientInterface;
-use SimplePaypal\Http\CurlHandler;
 use SimplePaypal\Buttons\Button;
 
 class Manager extends Configurable
@@ -32,7 +31,15 @@ class Manager extends Configurable
   protected function defaults()
   {
     return array(
-      'http_client' => function() { return new CurlHandler(); }
+      'http_client' => function() {
+        if (Http\CurlHandler::checkCompatibility()) {
+          return new Http\CurlHandler();
+        }
+        if (Http\NodejsHandler::checkCompatibility()) {
+          return new Http\NodejsHandler();
+        }
+        return new Http\CurlHandler();
+      }
     );
   }
 

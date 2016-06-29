@@ -42,4 +42,9 @@ class CurlHandler extends BaseHandler
     return $response;
   }
 
+  public static function checkCompatibility()
+  {
+    return defined('CURL_SSLVERSION_TLSv1_2');
+  }
+
 }

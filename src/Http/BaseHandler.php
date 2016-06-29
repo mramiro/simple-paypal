@@ -38,4 +38,6 @@ abstract class BaseHandler implements HttpClientInterface
 
   protected abstract function request(array $options);
 
+  protected abstract static function checkCompatibility();
+
 }
