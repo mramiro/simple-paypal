@@ -1,43 +1,52 @@
-(function() {
-  "use strict";
-}());
+#!/usr/bin/env node
 
-var https = require('https');
-var options = getOptions(process.argv[2]);
-// console.log(options);
-var req = https.request(options, function(res) {
+var urlParser = require('url');
+var queryString = require('querystring');
+
+var config = JSON.parse(process.argv[2]);
+var url = urlParser.parse(config.url);
+var options =  {
+  method: config.method,
+  hostname: url.hostname,
+  path: url.path,
+  protocol: url.protocol,
+  port: url.port,
+  headers: {
+    'User-Agent': 'node ' + process.version + '-' + process.arch + '-' + process.platform
+  }
+};
+if (config.debug !== undefined ) {
+  options.rejectUnauthorized = !config.debug;
+}
+
+var client = options.protocol == 'https:' ? require('https') : require('http');
+
+var data = config.data;
+if (config.method == 'POST' && data !== undefined) {
+  if (typeof data != 'string') {
+    data = queryString.stringify(data);
+    options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+  }
+  options.headers['Content-Length'] = Buffer.byteLength(data, 'utf-8');
+}
+
+var req = client.request(options, function(res) {
   var responseText = '';
   res.on('data', function(chunk) {
     responseText += chunk;
   });
   res.on('end', function() {
     console.log(responseText);
-    if (res.statusCode <= 200 || res.statusCode >= 300) {
-      // Exit 1
-    }
   });
-}).on('error', function(e) {
-  console.log('I AM ERROR');
-  console.log(e);
-}).end();
+});
 
-function getOptions(params)
-{
-  var config = JSON.parse(params);
-  var url = config.url.replace(/^https?:\/\//, '');
-  var host, path;
-  var splitAt = url.indexOf('/');
-  if (splitAt != -1) {
-    host = url.substring(0, splitAt);
-    path = url.substring(splitAt);
-  }
-  else {
-    host = url;
-    path = '';
-  }
-  return {
-    hostname: host,
-    method: config.method,
-    path: path
-  };
+req.on('error', function(e) {
+  console.log('I AM ERROR:', e);
+  process.exitCode = 1;
+});
+
+if (data) {
+  req.write(data);
 }
+
+req.end();
