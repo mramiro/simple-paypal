@@ -1,30 +1,13 @@
 <?php
 
+require_once __DIR__.'/HandlerTestBase.php';
+
 use SimplePaypal\Http\CurlHandler;
 
-class CurlHandlerTest extends PHPUnit_Framework_TestCase
+class CurlHandlerTest extends HandlerTestBase
 {
-  public function testGet()
+  protected function getInstance()
   {
-    $instance = new CurlHandler;
-    $response = $instance->get('https://api.github.com/users/HackerYou');
-    $json = json_decode($response);
-    $this->assertNotNull($json);
-    $this->assertEquals($json->login, 'HackerYou');
-  }
-
-  public function testPost()
-  {
-    $instance = new CurlHandler();
-    $someMarkdown = <<< MD
-# Title
-Lorem ipsum dolor sit amet, consectetur adipisicing elit
-MD;
-    $params = json_encode(array(
-      'text' => $someMarkdown,
-      'mode' => 'markdown'
-    ));
-    $response = $instance->post('https://api.github.com/markdown', $params);
-    $this->assertContains('<h1>', $response);
+    return new CurlHandler(true);
   }
 }

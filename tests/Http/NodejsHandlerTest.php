@@ -1,13 +1,13 @@
 <?php
 
+require_once __DIR__.'/HandlerTestBase.php';
+
 use SimplePaypal\Http\NodejsHandler;
 
-class NodejsHandlerTest extends PHPUnit_Framework_TestCase
+class NodejsHandlerTest extends HandlerTestBase
 {
-  public function testGet()
+  protected function getInstance()
   {
-    $instance = new NodejsHandler();
-    $response = $instance->get('https://tlstest.paypal.com');
-    $this->assertContains('PayPal_Connection_OK', $response);
+    return new NodejsHandler(true);
   }
 }

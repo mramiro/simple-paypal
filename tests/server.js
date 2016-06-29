@@ -1,49 +1,32 @@
-(function() {
-  "use strict";
-}());
+#!/usr/bin/env node
 
-var http = require('http');
-var urlParser = require('url');
-var qsParser = require('querystring');
+var fs = require('fs');
+var https = require('https');
+var express = require('express');
+var bodyParser = require('body-parser');
+
 var port = 8080;
+var app = express();
 
-function handleRequest(request, response)
-{
-  console.log("Incoming request: ", request.method + ' ' + request.url);
+app.use(bodyParser.urlencoded({ extended: true }));
 
-  var body = '';
-  request.on('data', function(chunk) {
-    body += chunk;
-    if (body.length > 1e6) {
-      request.connection.destroy();
-    }
-  });
+app.route('/').all(function(req, res, next) {
+  console.log('Serving:', req.method + ' ' + req.path);
+  console.log('Headers:', req.headers);
+  console.log('Body:', req.body);
+  next();
+})
+.get(function(req, res) {
+  res.json(req.query);
+}).post(function(req, res) {
+  res.json(req.body);
+});
 
-  request.on('end', function() {
-    response.setHeader('Content-Type', 'application/json');
-    response.statusCode = 200;
-    response.write(buildResponseText(request, body), 'utf-8');
-    response.end();
-  });
+var options = {
+  key: fs.readFileSync(__dirname + '/certs/dummy-prvkey.pem'),
+  cert: fs.readFileSync(__dirname + '/certs/dummy-pubcert.pem')
+};
 
-}
-
-function buildResponseText(request, body)
-{
-  var data = {};
-  console.log("Incoming request: ", request.method + ' ' + request.url);
-  data.method = request.method;
-  data.url = request.url;
-  if (data.method == 'GET') {
-    var url = urlParser.parse(data.url);
-    data.params = qsParser.parse(url.query);
-  }
-  else if (data.method == 'POST') {
-    data.params = qsParser.parse(body);
-  }
-  return JSON.stringify(data);
-}
-
-http.createServer(handleRequest).listen(port, function() {
-  console.log('Server listening on http://localhost:' + port);
+https.createServer(options, app).listen(port, function() {
+  console.log('Server listening on port ' + port);
 });
