@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
+require('dotenv').config({ path: __dirname+'/.env' });
 var fs = require('fs');
 var https = require('https');
 var express = require('express');
 var bodyParser = require('body-parser');
 
-var port = 8080;
+var port = process.env.TEST_SERVER_PORT ? process.env.TEST_SERVER_PORT : 8080;
 var app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
