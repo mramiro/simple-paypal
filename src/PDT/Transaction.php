@@ -62,4 +62,16 @@ class Transaction extends NvpCollection
       : static::FAIL . static::LINE_SEPARATOR . $this->renderErrors();
   }
 
+  public function getItemsData()
+  {
+    $items = array();
+    foreach ($this->items as $key => $value) {
+      if (preg_match('/^([a-z_]+)([0-9]+)$/', $key, $m)) {
+        $k = preg_replace('/_$/', '', $m[1]);
+        $items[$m[2]][$k] = $value;
+      }
+    }
+    return $items;
+  }
+
 }
