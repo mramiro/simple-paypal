@@ -92,4 +92,10 @@ class Manager extends Configurable
     return $btn->encrypt($this->getEncryptor());
   }
 
+  public function IpnValidation($postData = null)
+  {
+    $validator = new IPN\Validator($this->getHttpClient(), $this->endpoint);
+    return $validator->validate($postData);
+  }
+
 }
