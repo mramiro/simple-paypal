@@ -36,7 +36,7 @@ class Transaction extends Collection
     return $this;
   }
 
-  protected static function fromGlobals()
+  public static function fromGlobals()
   {
     return new static(isset($_GET['tx']) ? $_GET['tx'] : $_POST);
   }
