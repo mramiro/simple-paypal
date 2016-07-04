@@ -2,8 +2,10 @@
 
 use SimplePaypal\Http\HttpClientInterface;
 use SimplePaypal\Http\HttpException;
+use SimplePaypal\Common\Transaction;
+use SimplePaypal\Common\TransactionValidator;
 
-class Validator
+class Validator implements TransactionValidator
 {
   protected $client;
   protected $token;
@@ -16,9 +18,16 @@ class Validator
     $this->endpoint = $endpoint;
   }
 
-  public function validate($transactionId)
+  public function validate(Transaction $transaction)
   {
-    return Transaction::fromString($this->getResponse($transactionId));
+    $response = $this->getResponse($transaction->txn_id);
+    $data = Parser::parse($response);
+    if (is_array($data)) {
+      $transaction->fill($data);
+      return true;
+    }
+    $transaction->error = $data;
+    return false;
   }
 
   protected function getResponse($transactionId)

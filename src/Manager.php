@@ -3,6 +3,7 @@
 use RuntimeException;
 use SimplePaypal\Support\Configurable;
 use SimplePaypal\Common\Constants;
+use SimplePaypal\Common\Transaction;
 use SimplePaypal\Http\HttpClientInterface;
 use SimplePaypal\Buttons\Button;
 
@@ -48,10 +49,22 @@ class Manager extends Configurable
     $this->httpClient = $client;
   }
 
-  public function validatePdtTransaction($transactionId)
+  public function validateTransactionPdt($transaction = null)
   {
+    if (is_null($transaction)) {
+      $transaction = Transaction::fromGlobals();
+    }
     $validator = new PDT\Validator($this->getPdtToken(), $this->getHttpClient(), $this->endpoint);
-    return $validator->validate($transactionId);
+    return $transaction->validate($validator);
+  }
+
+  public function validateTransactionIpn($transaction = null)
+  {
+    if (is_null($transaction)) {
+      $transaction = Transaction::fromGlobals();
+    }
+    $validator = new IPN\Validator($this->getHttpClient(), $this->endpoint);
+    return $transaction->validate($validator);
   }
 
   public function createUploadCartButton(array $items = array())
@@ -90,12 +103,6 @@ class Manager extends Configurable
   {
     $btn = $this->decorateButton(new EWP\EncryptedButton($this->ewpCertId, $btn));
     return $btn->encrypt($this->getEncryptor());
-  }
-
-  public function IpnValidation($postData = null)
-  {
-    $validator = new IPN\Validator($this->getHttpClient(), $this->endpoint);
-    return $validator->validate($postData);
   }
 
 }

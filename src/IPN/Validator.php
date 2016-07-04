@@ -2,8 +2,10 @@
 
 use SimplePaypal\Http\HttpClientInterface;
 use SimplePaypal\Http\HttpException;
+use SimplePaypal\Common\Transaction;
+use SimplePaypal\Common\TransactionValidator;
 
-class Validator
+class Validator implements TransactionValidator
 {
   protected $client;
   protected $endpoint;
@@ -14,23 +16,18 @@ class Validator
     $this->endpoint = $endpoint;
   }
 
-  public function validate($postData = null)
+  public function validate(Transaction $transaction)
   {
-    if (is_null($postData)) {
-      if (get_magic_quotes_gpc()) {
-        array_map($_POST, function(&$v) {
-          $v = stripslashes($v);
-        });
-      }
-      $postData = $_POST;
+    $postData = array('cmd' => 'notify-validate') + $transaction->toArray();
+    $postData = http_build_query($postData);
+    try {
+      $response = $this->client->post($this->endpoint, $postData);
+      return trim($response) == 'VERIFIED';
     }
-    if (is_array($postData)) {
-      $postData = http_build_query($postData);
+    catch (HttpException $e) {
+      $e->setMessage('Could not communicate with Paypal');
+      throw $e;
     }
-    $postData = 'cmd=_notify-validate&' . $postData;
-
-    $response = $this->client->post($this->endpoint, $postData);
-    return trim($response) == 'VERIFIED' ? $postData : false;
   }
 
 }

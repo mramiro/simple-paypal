@@ -2,6 +2,7 @@
 
 use SimplePaypal\Manager;
 use SimplePaypal\Common\Constants;
+use SimplePaypal\Common\Transaction;
 
 class ManagerTest extends PHPUnit_Framework_TestCase
 {
@@ -31,12 +32,10 @@ class ManagerTest extends PHPUnit_Framework_TestCase
   {
     $manager = newManagerForDebug();
 
-    $t = $manager->validatePdtTransaction('totallyFakeTransactionId');
-    $this->assertFalse($t->isSuccessful());
-    $transactionErrors = $t->getErrors();
-    $this->assertGreaterThan(0, $transactionErrors);
+    $t = $manager->validateTransactionPdt(new Transaction('totallyFakeTransactionId'));
+    $this->assertFalse($t->isValid());
     // Paypal returns error 4002 when the transaction id (tx) is invalid
-    $this->assertEquals(4002, $transactionErrors[0]);
+    $this->assertEquals(4002, $t->error);
   }
 
   public function testCreateUploadCartButton()
