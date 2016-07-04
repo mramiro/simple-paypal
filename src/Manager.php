@@ -3,7 +3,7 @@
 use RuntimeException;
 use SimplePaypal\Support\Configurable;
 use SimplePaypal\Common\Constants;
-use SimplePaypal\Common\Transaction;
+use SimplePaypal\Common\TransactionValidator;
 use SimplePaypal\Http\HttpClientInterface;
 use SimplePaypal\Buttons\Button;
 
@@ -51,19 +51,26 @@ class Manager extends Configurable
 
   public function validateTransactionPdt($transaction = null)
   {
-    if (is_null($transaction)) {
-      $transaction = Transaction::fromGlobals();
-    }
-    $validator = new PDT\Validator($this->getPdtToken(), $this->getHttpClient(), $this->endpoint);
-    return $transaction->validate($validator);
+    return $this->validateTransaction(new PDT\Validator(
+      $this->getPdtToken(),
+      $this->getHttpClient(),
+      $this->endpoint
+    ), $transaction);
   }
 
   public function validateTransactionIpn($transaction = null)
   {
+    return $this->validateTransaction(new IPN\Validator(
+      $this->getHttpClient(),
+      $this->endpoint
+    ), $transaction);
+  }
+
+  protected function validateTransaction(TransactionValidator $validator, $transaction = null)
+  {
     if (is_null($transaction)) {
-      $transaction = Transaction::fromGlobals();
+      $transaction = $validator->transactionFromGlobals();
     }
-    $validator = new IPN\Validator($this->getHttpClient(), $this->endpoint);
     return $transaction->validate($validator);
   }
 

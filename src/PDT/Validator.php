@@ -18,6 +18,11 @@ class Validator implements TransactionValidator
     $this->endpoint = $endpoint;
   }
 
+  public function transactionFromGlobals()
+  {
+    return new Transaction($_GET['tx']);
+  }
+
   public function validate(Transaction $transaction)
   {
     $response = $this->getResponse($transaction->txn_id);
