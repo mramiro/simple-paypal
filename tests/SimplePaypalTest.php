@@ -1,15 +1,15 @@
 <?php
 
-use SimplePaypal\Manager;
+use SimplePaypal\SimplePaypal;
 use SimplePaypal\Common\Constants;
 use SimplePaypal\Common\Transaction;
 
-class ManagerTest extends PHPUnit_Framework_TestCase
+class SimplePaypalTest extends PHPUnit_Framework_TestCase
 {
   public function testConfigurationWorks()
   {
     // Test default values
-    $manager = new Manager();
+    $manager = new SimplePaypal();
     $this->assertEquals(Constants::ENDPOINT, $manager->getEndpoint());
     $this->assertNull($manager->getPdtToken());
     $this->assertInstanceOf('SimplePaypal\Http\HttpClientInterface', $manager->getHttpClient());
@@ -17,7 +17,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
 
     // Test custom values
     $httpClient = Mockery::mock('SimplePaypal\Http\HttpClientInterface');
-    $manager = new Manager(array(
+    $manager = new SimplePaypal(array(
       'pdt_token' => 'dummy',
       'http_client' => $httpClient,
       'currency' => 'MXN'

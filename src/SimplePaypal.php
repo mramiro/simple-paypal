@@ -7,7 +7,7 @@ use SimplePaypal\Common\TransactionValidator;
 use SimplePaypal\Http\HttpClientInterface;
 use SimplePaypal\Buttons\Button;
 
-class Manager extends Configurable
+class SimplePaypal extends Configurable
 {
   protected $pdtToken;
   protected $httpClient;

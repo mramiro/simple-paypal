@@ -4,7 +4,7 @@ require __DIR__.'/../vendor/autoload.php';
 
 function newManagerForDebug()
 {
-  return new SimplePaypal\Manager(array(
+  return new SimplePaypal\SimplePaypal(array(
     'pdt_token' => getenv('PDT_TOKEN'),
     'business_id' => getenv('BUSINESS_ID'),
     'country' => getenv('COUNTRY'),
